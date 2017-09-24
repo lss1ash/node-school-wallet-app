@@ -16,6 +16,11 @@
     "node": "^8.2"
   },
   "dependencies": {
-    "express": "^4.15.3"
+    "body-parser": "^1.18.2",
+    "express": "^4.15.3",
+    "luhn": "^2.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.7.2"
   }
 }
