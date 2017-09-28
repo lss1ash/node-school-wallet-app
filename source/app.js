@@ -16,6 +16,8 @@ const createTransactionController = require('./controllers/create-transaction');
 const Cards = require('./models/cards');
 const Transactions = require('./models/transactions');
 
+const ApplicationError = require('./libs/application-error');
+
 const app = new Koa();
 
 // Сохраним параметр id в ctx.params.id
@@ -31,7 +33,7 @@ router.post('/cards/:id/transactions', createTransactionController);
 router.all('/error', errorController);
 
 // logger
-app.use(async function(ctx, next) {
+app.use(async (ctx, next) => {
 	const start = new Date();
 	await next();
 	const ms = new Date() - start;

@@ -8,7 +8,7 @@ const ApplicationError = require('../libs/application-error');
 const DATA_SOURCE = 'datasource/cards.json';
 
 class Cards {
-	constructor () {
+	constructor() {
 		this._dataSource = path.join(__dirname, '..', DATA_SOURCE);
 		this._cards = null;
 	}
@@ -17,8 +17,8 @@ class Cards {
 	 * Возвращает все карты
 	 * @returns {Object[]}
 	 */
-	async getAll () {
-		if(!this._cards) {
+	async getAll() {
+		if (!this._cards) {
 			this._cards = JSON.parse(await file.read(this._dataSource));
 		}
 		return this._cards;
@@ -30,11 +30,13 @@ class Cards {
 	 * @param {Object} card описание карты
 	 * @returns {Object}
 	 */
-	async create (card) {
-		const isDataValid = card && card.hasOwnProperty('cardNumber') && card.hasOwnProperty('balance');
+	async create(card) {
+		const isDataValid = card &&
+			Object.prototype.hasOwnProperty.call(card, 'cardNumber') &&
+			Object.prototype.hasOwnProperty.call(card, 'balance');
 		if (isDataValid) {
-			let exists = this.exists(card);
-			if(exists) {
+			const exists = this.exists(card);
+			if (exists) {
 				this._cards[this._cards.indexOf(exists)].balance = card.balance;
 			} else {
 				card.id = this._cards.length + 1;
@@ -42,19 +44,16 @@ class Cards {
 			}
 			await file.write(this._dataSource, this._cards);
 			return card;
-		} else {
-			throw new ApplicationError('Card data is invalid', 400);
 		}
+		throw new ApplicationError('Card data is invalid', 400);
 	}
 
 	/**
 	 * Удалет карту
 	 * @param {Number} id идентификатор карты
 	 */
-	async remove (id) {
-		const card = this._cards.find((item) => {
-			return item.id === id;
-		});
+	async remove(id) {
+		const card = this._cards.find((item) => item.id === id);
 
 		if (!card) {
 			throw new ApplicationError(`Card with ID=${id} not found`, 404);
@@ -71,11 +70,9 @@ class Cards {
 	* @param {Object} card описание карты
 	* @returns {Boolean, Number} существует?, индекс
 	*/
-	exists (card) {
-		const foundOne = this._cards.find((item) => {
-			return item.cardNumber === card.cardNumber;
-		});
-		if(foundOne) {
+	exists(card) {
+		const foundOne = this._cards.find((item) => item.cardNumber === card.cardNumber);
+		if (foundOne) {
 			return foundOne;
 		}
 		return false;

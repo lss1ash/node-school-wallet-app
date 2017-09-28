@@ -4,28 +4,27 @@ const fs = require('fs');
 
 const file = {
 
-	read (fileName) {
+	read(fileName) {
 		return new Promise((resolve, reject) => {
-			fs.readFile(fileName, (err, file) => {
+			fs.readFile(fileName, (err, gotFile) => {
 				if (err) {
 					return reject(err);
 				}
-				resolve(file);
+				return resolve(gotFile);
 			});
 		});
 	},
 
-	write (fileName, data) {
+	write(fileName, data) {
 		return new Promise((resolve, reject) => {
 			fs.writeFile(fileName, JSON.stringify(data, null, '  '), 'utf8', (err) => {
 				if (err) {
 					return reject(err);
-				} else {
-					resolve();
 				}
+				return resolve();
 			});
 		});
 	}
-}
+};
 
 module.exports = file;

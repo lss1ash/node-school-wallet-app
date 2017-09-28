@@ -9,51 +9,48 @@ const Cards = require('../models/cards');
 const DATA_SOURCE = 'datasource/transaction.json';
 
 class Transactions {
-	constructor () {
+	constructor() {
 		this._dataSource = path.join(__dirname, '..', DATA_SOURCE);
 		this._transactions = null;
 	}
 
 	async getAll() {
-		if(!this._transactions) {
+		if (!this._transactions) {
 			this._transactions = JSON.parse(await file.read(this._dataSource));
 		}
 		return this._transactions;
 	}
 
 	get(cardId) {
-		if(this._transactions && this._transactions.length > 0) {
-			const transactions = this._transactions.filter((item) => {
-				return item.cardId === +cardId;
-			});
+		if (this._transactions && this._transactions.length > 0) {
+			const transactions = this._transactions.filter((item) => item.cardId === +cardId);
 			return transactions;
-		} else {
-			throw new ApplicationError('There are no transactions at all!', 500)
 		}
+		throw new ApplicationError('There are no transactions at all!', 500);
 	}
 
-	async create (transaction) {
+	async create(transaction) {
 		const isDataValid = transaction &&
-			transaction.hasOwnProperty('cardId') &&
-			transaction.hasOwnProperty('type')
-			transaction.hasOwnProperty('data') &&
-			// transaction.hasOwnProperty('time') &&
-			transaction.hasOwnProperty('sum');
+			Object.prototype.hasOwnProperty.call(transaction, 'cardId') &&
+			Object.prototype.hasOwnProperty.call(transaction, 'type') &&
+			Object.prototype.hasOwnProperty.call(transaction, 'data') &&
+			// Object.prototype.hasOwnProperty.call(transaction, 'time') &&
+			Object.prototype.hasOwnProperty.call(transaction, 'sum');
 		if (isDataValid) {
-			// if(!Cards.exists(transaction.cardId)) {
-			// 	console.log('try to throw!');
-			// 	throw new ApplicationError(`Card ${cardId} doesn't exist`, 400);
-			// }
+			if (!(Cards.exists(transaction.cardId))) {
+				console.log('try to throw!');
+				throw new ApplicationError(`Card ${transaction.cardId} doesn't exist`, 400);
+			}
 			this._transactions.push(transaction);
 			await file.write(this._dataSource, this._transactions);
 			return transaction;
-		} else {
-			throw new ApplicationError('Card data is invalid', 400);
 		}
+		throw new ApplicationError('Card data is invalid', 400);
 	}
 
-	remove () {
-		throw new ApplicationError('Card removing is prohibited!', 400)
+	static remove() {
+		// this.id = id;
+		throw new ApplicationError('Card removing is prohibited!', 400);
 	}
 }
 

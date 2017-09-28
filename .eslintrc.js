@@ -1,5 +1,6 @@
 module.exports = {
-	"extends": "airbnb",
+		"extends": [
+		"eslint-config-airbnb"],
 
 	"globals": {
 		"document": true
@@ -16,10 +17,14 @@ module.exports = {
 		"no-confusing-arrow": [2, {"allowParens": true}],
 		"object-curly-spacing": [2, "never"],
 
+		"no-param-reassign": ["error", { "props": false }],
+		"no-console": ["error", { allow: ["log", "warn", "error"] }],
+
 		"import/no-extraneous-dependencies": 0,
 		"import/no-unresolved": 0,
 
 		"jsx-quotes": [2, "prefer-single"],
+		"jsx-a11y/href-no-hash": [0],
 
 		"react/jsx-filename-extension": [1, {"extensions": [".js", ".jsx"]}],
 		"react/jsx-indent": [2, "tab"],
