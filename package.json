@@ -5,7 +5,7 @@
   "author": "",
   "scripts": {
     "start": "node ./source/app.js",
-		"debug": "nodemon ./source/app.js -L",
+    "debug": "nodemon ./source/app.js -L",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,10 +24,14 @@
   },
   "devDependencies": {
     "eslint": "^4.7.2",
+    "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-react": "^7.4.0",
     "eslint-plugin-standard": "^3.0.1",
-    "nodemon": "^1.12.1"
+    "nodemon": "^1.12.1",
+    "webpack": "^3.6.0"
   }
 }
