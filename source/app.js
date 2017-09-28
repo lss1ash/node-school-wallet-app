@@ -10,7 +10,11 @@ const createCardController = require('./controllers/create-card');
 const deleteCardController = require('./controllers/delete-card');
 const errorController = require('./controllers/error');
 
+const getTransactionsController = require('./controllers/get-transactions');
+const createTransactionController = require('./controllers/create-transaction');
+
 const Cards = require('./models/cards');
+const Transactions = require('./models/transactions');
 
 const app = new Koa();
 
@@ -20,6 +24,9 @@ router.param('id', (id, ctx, next) => next());
 router.get('/cards/', getCardsController);
 router.post('/cards/', createCardController);
 router.delete('/cards/:id', deleteCardController);
+
+router.get('/cards/:id/transactions', getTransactionsController);
+router.post('/cards/:id/transactions', createTransactionController);
 
 router.all('/error', errorController);
 
@@ -46,6 +53,13 @@ app.use(async (ctx, next) => {
 app.use(async (ctx, next) => {
 	ctx.Cards = new Cards();
 	await ctx.Cards.getAll();
+	await next();
+});
+
+// Создадим модель Cards на уровне приложения и проинициализируем ее
+app.use(async (ctx, next) => {
+	ctx.Transactions = new Transactions();
+	await ctx.Transactions.getAll();
 	await next();
 });
 

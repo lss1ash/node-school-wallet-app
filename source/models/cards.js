@@ -5,28 +5,12 @@ const path = require('path');
 const file = require('../libs/file');
 const ApplicationError = require('../libs/application-error');
 
-const DATA_SOURCE = 'cards.json';
+const DATA_SOURCE = 'datasource/cards.json';
 
 class Cards {
 	constructor () {
 		this._dataSource = path.join(__dirname, '..', DATA_SOURCE);
 		this._cards = null;
-	}
-
-	/**
-	* Получает id карты (новый или существующей карты, если нашлась)
-	*
-	* @param {Object} card описание карты
-	* @returns {Boolean, Number} существует?, индекс
-	*/
-	_exists (card) {
-		const foundOne = this._cards.find((item) => {
-			return item.cardNumber === card.cardNumber;
-		});
-		if(foundOne) {
-			return foundOne;
-		}
-		return false;
 	}
 
 	/**
@@ -49,7 +33,7 @@ class Cards {
 	async create (card) {
 		const isDataValid = card && card.hasOwnProperty('cardNumber') && card.hasOwnProperty('balance');
 		if (isDataValid) {
-			let exists = this._exists(card);
+			let exists = this.exists(card);
 			if(exists) {
 				this._cards[this._cards.indexOf(exists)].balance = card.balance;
 			} else {
@@ -79,6 +63,22 @@ class Cards {
 		const cardIndex = this._cards.indexOf(card);
 		this._cards.splice(cardIndex, 1);
 		await file.write(this._dataSource, this._cards);
+	}
+
+	/**
+	* Получает id карты (новый или существующей карты, если нашлась)
+	*
+	* @param {Object} card описание карты
+	* @returns {Boolean, Number} существует?, индекс
+	*/
+	exists (card) {
+		const foundOne = this._cards.find((item) => {
+			return item.cardNumber === card.cardNumber;
+		});
+		if(foundOne) {
+			return foundOne;
+		}
+		return false;
 	}
 }
 
