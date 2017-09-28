@@ -1,6 +1,6 @@
 build/
 node_modules/
-models/cards.json
+datasource/
 .DS_Store
 Thumbs.db
 .idea
