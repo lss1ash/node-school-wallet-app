@@ -1,7 +1,6 @@
 build/
 node_modules/
-datasource/cards.json
-datasource/transaction.json
+datasource/
 .DS_Store
 Thumbs.db
 .idea
@@ -10,5 +9,6 @@ Thumbs.db
 *.psd
 *.ai
 *.pdf
+*.old
 yarn.lock
 npm-debug.log*
