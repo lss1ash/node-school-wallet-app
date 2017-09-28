@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ApplicationError = require('../../libs/application-error');
+const ApplicationError = require('../libs/application-error');
 
 const DATA_SOURCE = path.join(__dirname, '..', 'cards.json');
 
