@@ -1,15 +1,7 @@
 'use strict';
 
-const CardsModel = require('../models/cards');
-
-module.exports = (req, res) => {
-	const cardId = Number(req.params['id']);
-
-	try {
-		const cardsModel = new CardsModel();
-		cardsModel.remove(cardId);
-		res.sendStatus(200);
-	} catch (err) {
-		res.sendStatus(err.status);
-	}
+module.exports = async (ctx) => {
+	const cardId = Number(ctx.params['id']);
+	await ctx.Cards.remove(cardId);
+	ctx.status = 200;
 };
