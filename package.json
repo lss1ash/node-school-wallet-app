@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@github.com:rakchaev/node-school-app.git"
+    "url": "ssh://git@github.com:lss1ash/node-school-wallet-app.git"
   },
   "license": "ISC",
   "engines": {
