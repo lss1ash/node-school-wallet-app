@@ -4,7 +4,6 @@ const path = require('path');
 
 const file = require('../libs/file');
 const ApplicationError = require('../libs/application-error');
-const Cards = require('../models/cards');
 
 const DATA_SOURCE = 'datasource/transaction.json';
 
@@ -21,12 +20,12 @@ class Transactions {
 		return this._transactions;
 	}
 
-	get(cardId) {
+	async get(cardId) {
 		if (this._transactions && this._transactions.length > 0) {
-			const transactions = this._transactions.filter((item) => item.cardId === +cardId);
-			return transactions;
+			const transactions = this._transactions.filter((item) => +item.cardId === +cardId);
+			return transactions.length > 0 ? transactions : null;
 		}
-		throw new ApplicationError('There are no transactions at all!', 500);
+		throw new ApplicationError('Error getting transactions...', 500);
 	}
 
 	async create(transaction) {
@@ -34,22 +33,25 @@ class Transactions {
 			Object.prototype.hasOwnProperty.call(transaction, 'cardId') &&
 			Object.prototype.hasOwnProperty.call(transaction, 'type') &&
 			Object.prototype.hasOwnProperty.call(transaction, 'data') &&
-			// Object.prototype.hasOwnProperty.call(transaction, 'time') &&
 			Object.prototype.hasOwnProperty.call(transaction, 'sum');
+
 		if (isDataValid) {
-			if (!(Cards.exists(transaction.cardId))) {
-				console.log('try to throw!');
-				throw new ApplicationError(`Card ${transaction.cardId} doesn't exist`, 400);
-			}
+			transaction.id = this._transactions.length + 1;
+			transaction.cardId = Number(transaction.cardId);
+			const now = new Date();
+
+			// Добавить getTimezoneOffset()
+			transaction.time = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}` +
+				`T${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
 			this._transactions.push(transaction);
+
 			await file.write(this._dataSource, this._transactions);
 			return transaction;
 		}
-		throw new ApplicationError('Card data is invalid', 400);
+		throw new ApplicationError('Card data is invalid!', 400);
 	}
 
 	static remove() {
-		// this.id = id;
 		throw new ApplicationError('Card removing is prohibited!', 400);
 	}
 }

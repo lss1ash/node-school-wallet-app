@@ -5,4 +5,9 @@ Thumbs.db
 .idea
 *.sublime*
 *.log
+*.psd
+*.ai
+*.pdf
+*.old
+yarn.lock
 npm-debug.log*

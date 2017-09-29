@@ -77,6 +77,14 @@ class Cards {
 		}
 		return false;
 	}
+
+	existsId(cardId) {
+		const foundOne = this._cards.find((item, index) => index === cardId);
+		if (foundOne) {
+			return true;
+		}
+		return false;
+	}
 }
 
 module.exports = Cards;
