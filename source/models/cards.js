@@ -1,23 +1,27 @@
 'use strict';
 
-const fs = require('fs');
 const path = require('path');
 
-const ApplicationError = require('../../libs/application-error');
+const file = require('../libs/file');
+const ApplicationError = require('../libs/application-error');
 
-const DATA_SOURCE = path.join(__dirname, '..', 'cards.json');
+const DATA_SOURCE = 'datasource/cards.json';
 
 class Cards {
-	constructor () {
-		this._dataSource = require(DATA_SOURCE);
+	constructor() {
+		this._dataSource = path.join(__dirname, '..', DATA_SOURCE);
+		this._cards = null;
 	}
 
 	/**
 	 * Возвращает все карты
 	 * @returns {Object[]}
 	 */
-	getAll () {
-		return this._dataSource;
+	async getAll() {
+		if (!this._cards) {
+			this._cards = JSON.parse(await file.read(this._dataSource));
+		}
+		return this._cards;
 	}
 
 	/**
@@ -26,41 +30,60 @@ class Cards {
 	 * @param {Object} card описание карты
 	 * @returns {Object}
 	 */
-	create (card) {
-		const isDataValid = card && card.hasOwnProperty('cardNumber') && card.hasOwnProperty('balance');
+	async create(card) {
+		const isDataValid = card &&
+			Object.prototype.hasOwnProperty.call(card, 'cardNumber') &&
+			Object.prototype.hasOwnProperty.call(card, 'balance');
 		if (isDataValid) {
-			card.id = this._dataSource.length + 1;
-			this._dataSource.push(card);
-			this._saveUpdates();
+			const exists = this.exists(card);
+			if (exists) {
+				this._cards[this._cards.indexOf(exists)].balance = card.balance;
+			} else {
+				card.id = this._cards.length + 1;
+				this._cards.push(card);
+			}
+			await file.write(this._dataSource, this._cards);
 			return card;
-		} else {
-			throw new ApplicationError('Card data is invalid', 400);
 		}
+		throw new ApplicationError('Card data is invalid', 400);
 	}
 
 	/**
 	 * Удалет карту
 	 * @param {Number} id идентификатор карты
 	 */
-	remove (id) {
-		const card = this._dataSource.find((item) => {
-			return item.id === id;
-		});
+	async remove(id) {
+		const card = this._cards.find((item) => item.id === id);
 
 		if (!card) {
 			throw new ApplicationError(`Card with ID=${id} not found`, 404);
 		}
-		const cardIndex = this._dataSource.indexOf(card);
-		this._dataSource.splice(cardIndex, 1);
-		this._saveUpdates();
+
+		const cardIndex = this._cards.indexOf(card);
+		this._cards.splice(cardIndex, 1);
+		await file.write(this._dataSource, this._cards);
 	}
 
 	/**
-	 * Сохраняет изменения
-	 * @private
-	 */
-	_saveUpdates () {
-		fs.writeFileSync(DATA_SOURCE, JSON.stringify(this._dataSource, null, 4));
+	* Получает id карты (новый или существующей карты, если нашлась)
+	*
+	* @param {Object} card описание карты
+	* @returns {Boolean, Number} существует?, индекс
+	*/
+	exists(card) {
+		const foundOne = this._cards.find((item) => item.cardNumber === card.cardNumber);
+		if (foundOne) {
+			return foundOne;
+		}
+		return false;
+	}
+
+	existsId(cardId) {
+		const foundOne = this._cards.find((item, index) => index === cardId);
+		if (foundOne) {
+			return true;
+		}
+		return false;
 	}
 }
 
