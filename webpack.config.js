@@ -1,8 +1,9 @@
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
 
 module.exports = {
-	entry: './source/client/index.js',
+	entry: './source/client/',
 	output: {
 		path: path.resolve(__dirname, 'build'),
 		filename: 'bundle.js'
@@ -12,10 +13,11 @@ module.exports = {
 			{
 				test: /\.js$/,
 				exclude: [
-					/node_modules/,
-					/build/
+					path.resolve(__dirname, 'build'),
+					path.resolve(__dirname, 'node_modules'),
+					path.resolve(__dirname, '.git')
 				],
-				loader: [
+				use: [
 					'babel-loader',
 					'eslint-loader'
 				]
@@ -23,16 +25,22 @@ module.exports = {
 			// ,
 			// {
 			// 	test: /\.css$/,
-			// 	use: [
-			// 		'style-loader',
-			// 		'css-loader',
-			// 		'postcss-loader'
-			// 	]
+			// 	exclude: [
+			// 		path.resolve(__dirname, 'build'),
+			// 		path.resolve(__dirname, 'node_modules'),
+			// 		path.resolve(__dirname, '.git')
+			// 	],
+			// 	use: ExtractTextPlugin.extract({
+			// 		use: ['style-loader', 'css-loader'] // , 'sass-loader']
+			// 	})
 			// }
 		]
-	}
-	// ,
-	// plugins: [new HtmlWebpackPlugin({
-	// 	title: 'Yamoney Node.js School'
-	// })]
+	},
+	plugins: [
+		new HtmlWebpackPlugin({
+			title: 'Yamoney Node.js School'
+		})
+		// ,
+		// new ExtractTextPlugin('test111.css')
+	]
 };
