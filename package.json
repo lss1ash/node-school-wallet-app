@@ -7,7 +7,8 @@
     "start": "node ./source/app.js",
     "debug": "nodemon ./source/app.js -L",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "wp": "webpack",
+		"esl": "eslint ./source"
   },
   "repository": {
     "type": "git",
