@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+import style from './style.css'
 import {helloHandler} from './handlers';
 
 const component = () => {
