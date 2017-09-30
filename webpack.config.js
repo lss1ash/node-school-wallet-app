@@ -12,11 +12,6 @@ module.exports = {
 		rules: [
 			{
 				test: /\.js$/,
-				exclude: [
-					path.resolve(__dirname, 'build'),
-					path.resolve(__dirname, 'node_modules'),
-					path.resolve(__dirname, '.git')
-				],
 				use: [
 					'babel-loader',
 					'eslint-loader'
@@ -24,14 +19,7 @@ module.exports = {
 			},
 			{
 				test: /\.css$/,
-				exclude: [
-					path.resolve(__dirname, 'build'),
-					path.resolve(__dirname, 'node_modules'),
-					path.resolve(__dirname, '.git')
-				],
-				use: ExtractTextPlugin.extract(
-					['style-loader', 'css-loader'] // , 'sass-loader']
-				)
+				use: ExtractTextPlugin.extract(['css-loader'])
 			}
 		]
 	},
@@ -39,6 +27,6 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			title: 'Yamoney Node.js School'
 		}),
-		new ExtractTextPlugin('test111.css')
+		new ExtractTextPlugin('style.css')
 	]
 };
