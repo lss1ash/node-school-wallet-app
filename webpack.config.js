@@ -16,8 +16,8 @@ module.exports = {
 					/build/
 				],
 				loader: [
-					'eslint-loader',
-					'babel-loader'
+					'babel-loader',
+					'eslint-loader'
 				]
 			}
 			// ,
