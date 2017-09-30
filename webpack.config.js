@@ -12,6 +12,9 @@ module.exports = {
 		rules: [
 			{
 				test: /\.js$/,
+				exclude: [
+					path.resolve(__dirname, 'build')
+				],
 				use: [
 					'babel-loader',
 					'eslint-loader'
@@ -19,6 +22,9 @@ module.exports = {
 			},
 			{
 				test: /\.css$/,
+				exclude: [
+					path.resolve(__dirname, 'build')
+				],
 				use: ExtractTextPlugin.extract(['css-loader'])
 			}
 		]
