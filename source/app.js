@@ -5,6 +5,9 @@ const Koa = require('koa');
 const serve = require('koa-static');
 const router = require('koa-router')();
 const bodyParser = require('koa-bodyparser')();
+// const React = require('react');
+const ReactDOMServer = require('react-dom/server');
+const App = require('../public/bundle');
 
 const getCardsController = require('./controllers/cards/get-cards');
 const createCardController = require('./controllers/cards/create');
@@ -14,9 +17,9 @@ const createTransactionsController = require('./controllers/transactions/create'
 
 const errorController = require('./controllers/error');
 
-const ApplicationError = require('libs/application-error');
-const CardsModel = require('source/models/cards');
-const TransactionsModel = require('source/models/transactions');
+const ApplicationError = require('../libs/application-error');
+const CardsModel = require('./models/cards');
+const TransactionsModel = require('./models/transactions');
 
 const app = new Koa();
 
@@ -25,7 +28,9 @@ router.param('id', (id, ctx, next) => next());
 
 
 router.get('/', (ctx) => {
-	ctx.body = fs.readFileSync('./public/index.html', 'utf8');
+	// ctx.body = fs.readFileSync('./public/index.html', 'utf8');
+	// console.log(App);
+	ctx.body = ReactDOMServer.renderToString(App());
 });
 
 router.get('/cards/', getCardsController);

@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const Model = require('./model');
-const ApplicationError = require('libs/application-error');
+const ApplicationError = require('../../../libs/application-error');
 
 class FileModel extends Model {
 	constructor(sourceFileName) {
