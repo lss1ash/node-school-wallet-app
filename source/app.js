@@ -5,13 +5,13 @@ const serve = require('koa-static');
 const router = require('koa-router')();
 const bodyParser = require('koa-bodyparser')();
 
-const getCardsController = require('./controllers/get-cards');
-const createCardController = require('./controllers/create-card');
-const deleteCardController = require('./controllers/delete-card');
+const getCardsController = require('./controllers/cards/get-cards');
+const createCardController = require('./controllers/cards/create-card');
+const deleteCardController = require('./controllers/cards/delete-card');
 const errorController = require('./controllers/error');
 
-const getTransactionsController = require('./controllers/get-transactions');
-const createTransactionController = require('./controllers/create-transaction');
+const getTransactionsController = require('./controllers/transactions/get-transactions');
+const createTransactionController = require('./controllers/transactions/create-transaction');
 
 const Cards = require('./models/cards');
 const Transactions = require('./models/transactions');
