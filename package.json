@@ -43,6 +43,8 @@
     "emotion": "^7.2.0",
     "emotion-server": "^7.3.2",
     "eslint": "^4.7.0",
+    "eslint-config-airbnb": "^16.0.0",
+    "eslint-loader": "^1.9.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.3.0",
