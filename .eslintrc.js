@@ -22,6 +22,7 @@ module.exports = {
 
 		"import/no-extraneous-dependencies": 0,
 		"import/no-unresolved": 0,
+		"import/extensions": 0,
 
 		"jsx-quotes": [2, "prefer-single"],
 		"jsx-a11y/href-no-hash": [0],
