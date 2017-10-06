@@ -5,8 +5,8 @@ module.exports = async (ctx) => {
 	if (transactions) {
 		ctx.body = transactions;
 		ctx.status = 201;
-	} else {
-		ctx.status = 404;
-		ctx.body = 'Transaction not found';
+		return;
 	}
+	ctx.status = 404;
+	ctx.body = 'Transaction not found';
 };

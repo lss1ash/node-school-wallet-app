@@ -5,7 +5,7 @@ const path = require('path');
 const file = require('../libs/file');
 const ApplicationError = require('../libs/application-error');
 
-const DATA_SOURCE = 'datasource/transaction.json';
+const DATA_SOURCE = 'datasource/transactions.json';
 
 class Transactions {
 	constructor() {

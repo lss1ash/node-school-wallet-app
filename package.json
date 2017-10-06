@@ -5,10 +5,10 @@
   "author": "",
   "scripts": {
     "start": "node ./source/app.js",
-    "debug": "nodemon ./source/app.js -L",
+    "watch": "nodemon ./source/app.js -L",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "wp": "webpack",
-    "esl": "eslint ./source"
+    "build": "webpack",
+    "lint": "eslint ./source"
   },
   "repository": {
     "type": "git",
