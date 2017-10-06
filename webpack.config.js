@@ -1,11 +1,11 @@
 // const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
 
 module.exports = {
-	entry: './source/client/',
+	entry: './source/views/client/',
 	output: {
-		path: path.resolve(__dirname, 'build'),
+		path: path.resolve(__dirname, 'public'),
 		filename: 'bundle.js'
 	},
 	module: {
@@ -22,17 +22,19 @@ module.exports = {
 			{
 				test: /\.css$/,
 				// include: [path.resolve(__dirname, 'source')],
-				use: ExtractTextPlugin.extract({
-					fallback: 'style-loader',
-					use: 'css-loader'
-				})
+				// use: ExtractTextPlugin.extract({
+				// 	fallback: 'style-loader',
+				// 	use: 'css-loader'
+				// })
+				loader: 'css-loader'
 			}
 		]
-	},
-	plugins: [
-		// new HtmlWebpackPlugin({
-		// 	title: 'Yamoney Node.js School'
-		// }),
-		new ExtractTextPlugin('style.css')
-	]
+	}
+	// ,
+	// plugins: [
+	// 	// new HtmlWebpackPlugin({
+	// 	// 	title: 'Yamoney Node.js School'
+	// 	// }),
+	// 	new ExtractTextPlugin('style.css')
+	// ]
 };
