@@ -5,6 +5,7 @@ const serve = require('koa-static');
 const router = require('koa-router')();
 const bodyParser = require('koa-bodyparser')();
 
+const getAppController = require('./controllers/app/get-root');
 const getCardsController = require('./controllers/cards/get-cards');
 const createCardController = require('./controllers/cards/create-card');
 const deleteCardController = require('./controllers/cards/delete-card');
@@ -22,6 +23,8 @@ const app = new Koa();
 
 // Сохраним параметр id в ctx.params.id
 router.param('id', (id, ctx, next) => next());
+
+router.get('/', getAppController);
 
 router.get('/cards/', getCardsController);
 router.post('/cards/', createCardController);
