@@ -35,9 +35,9 @@ class Cards {
 			Object.prototype.hasOwnProperty.call(card, 'cardNumber') &&
 			Object.prototype.hasOwnProperty.call(card, 'balance');
 		if (isDataValid) {
-			const exists = this.exists(card);
-			if (exists) {
-				this._cards[this._cards.indexOf(exists)].balance = card.balance;
+			const existentCard = this.getExistent(card);
+			if (existentCard) {
+				this._cards[this._cards.indexOf(existentCard)].balance = card.balance;
 			} else {
 				card.id = this._cards.length + 1;
 				this._cards.push(card);
@@ -70,7 +70,7 @@ class Cards {
 	* @param {Object} card описание карты
 	* @returns {Boolean, Number} существует?, индекс
 	*/
-	exists(card) {
+	getExistent(card) {
 		const foundOne = this._cards.find((item) => item.cardNumber === card.cardNumber);
 		if (foundOne) {
 			return foundOne;
