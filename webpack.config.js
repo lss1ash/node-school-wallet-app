@@ -12,7 +12,8 @@ module.exports = {
 		rules: [
 			{
 				test: /\.js$/,
-				include: [path.resolve(__dirname, 'source')],
+				// include: [path.resolve(__dirname, 'source')],
+				exclude: /node_modules/,
 				use: [
 					'babel-loader',
 					'eslint-loader'
@@ -20,15 +21,18 @@ module.exports = {
 			},
 			{
 				test: /\.css$/,
-				include: [path.resolve(__dirname, 'source')],
-				use: ExtractTextPlugin.extract(['css-loader'])
+				// include: [path.resolve(__dirname, 'source')],
+				use: ExtractTextPlugin.extract({
+					fallback: 'style-loader',
+					use: 'css-loader'
+				})
 			}
 		]
 	},
 	plugins: [
-		new HtmlWebpackPlugin({
-			title: 'Yamoney Node.js School'
-		}),
+		// new HtmlWebpackPlugin({
+		// 	title: 'Yamoney Node.js School'
+		// }),
 		new ExtractTextPlugin('style.css')
 	]
 };
