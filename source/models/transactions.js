@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const logger = require('../libs/logger')('wallet-app');
 
 const file = require('../libs/file');
 const ApplicationError = require('../libs/application-error');
@@ -25,7 +26,9 @@ class Transactions {
 			const transactions = this._transactions.filter((item) => +item.cardId === +cardId);
 			return transactions.length > 0 ? transactions : null;
 		}
-		throw new ApplicationError('Error getting transactions...', 500);
+		logger.log('warn', 'Error getting transactions...');
+		// throw new ApplicationError('Error getting transactions...', 500);
+		return null;
 	}
 
 	async create(transaction) {
@@ -48,7 +51,9 @@ class Transactions {
 			await file.write(this._dataSource, this._transactions);
 			return transaction;
 		}
-		throw new ApplicationError('Card data is invalid!', 400);
+		// throw new ApplicationError('Card data is invalid!', 400);
+		logger.log('warn', 'Данные карты недействительны');
+		return null;
 	}
 
 	static remove() {

@@ -1,9 +1,10 @@
 'use strict';
 
 const path = require('path');
+const logger = require('../libs/logger')('wallet-app');
 
 const file = require('../libs/file');
-const ApplicationError = require('../libs/application-error');
+// const ApplicationError = require('../libs/application-error');
 
 const DATA_SOURCE = 'datasource/cards.json';
 
@@ -45,7 +46,9 @@ class Cards {
 			await file.write(this._dataSource, this._cards);
 			return card;
 		}
-		throw new ApplicationError('Card data is invalid', 400);
+		// throw new ApplicationError('Card data is invalid', 400);
+		logger.log('info', 'Введены некорректные данные карты', card);
+		return null;
 	}
 
 	/**
@@ -56,7 +59,8 @@ class Cards {
 		const card = this._cards.find((item) => item.id === id);
 
 		if (!card) {
-			throw new ApplicationError(`Card with ID=${id} not found`, 404);
+			logger.log('info', 'Карта с указанным идентификатором не найдена', id);
+			// throw new ApplicationError(`Card with ID=${id} not found`, 404);
 		}
 
 		const cardIndex = this._cards.indexOf(card);

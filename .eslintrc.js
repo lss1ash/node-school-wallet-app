@@ -18,7 +18,7 @@ module.exports = {
 		"object-curly-spacing": [2, "never"],
 
 		"no-param-reassign": ["error", { "props": false }],
-		"no-console": ["error", { allow: ["log", "warn", "error"] }],
+		// "no-console": ["error", { allow: ["log", "warn", "error"] }],
 
 		"import/no-extraneous-dependencies": 0,
 		"import/no-unresolved": 0,
