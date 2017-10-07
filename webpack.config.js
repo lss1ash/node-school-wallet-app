@@ -1,6 +1,9 @@
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// const env = process.env.NODE_ENV
+// use: env === 'production' ? 'css-loader&minimize=true' : 'css-loader'
+
 const path = require('path');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = [
 	{
@@ -25,16 +28,20 @@ module.exports = [
 					// include: [path.resolve(__dirname, 'source')],
 					use: ExtractTextPlugin.extract({
 						fallback: 'style-loader',
-						use: 'css-loader'
+						// use: 'css-loader'
+						use: {
+							loader: 'css-loader',
+							options: {
+								minimize: true
+							}
+						}
 					})
 				}
 			]
 		},
 		plugins: [
-			// new HtmlWebpackPlugin({
-			// 	title: 'Yamoney Node.js School'
-			// }),
-			new ExtractTextPlugin('style.css')
+			new ExtractTextPlugin('style.css'),
+			new webpack.optimize.UglifyJsPlugin()
 		]
 	},
 	{
@@ -50,7 +57,6 @@ module.exports = [
 				{
 					test: /\.js$/,
 					include: [path.resolve(__dirname, 'source')],
-					// exclude: /node_modules/,
 					use: [
 						'babel-loader',
 						'eslint-loader'
@@ -58,7 +64,6 @@ module.exports = [
 				},
 				{
 					test: /\.css$/,
-					// include: [path.resolve(__dirname, 'source')],
 					use: 'ignore-loader'
 				}
 			]
