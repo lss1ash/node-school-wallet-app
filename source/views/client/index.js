@@ -1,11 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom/server';
+import ReactDOM from 'react-dom';
+import {hydrate} from 'emotion';
 // import {hydrate as emotionHydrate} from 'emotion';
 import {App} from '../../client/components';
 
-// const {ids, appData} = window.__data;
+// eslint-disable-next-line
+const {ids, appData} = window.__data;
 
-// emotionHydrate(ids);
-// reactHydrate(<App data={appData} />, document.getElementById('root'));
-
-ReactDOM.render(<App />, document.getElementById('root'));
+hydrate(ids);
+ReactDOM.hydrate(<App data={appData} />, document.getElementById('root'));
