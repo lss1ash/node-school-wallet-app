@@ -119,7 +119,7 @@ class App extends Component {
 		const {cardsList, activeCardIndex, cardHistory} = this.state;
 		const activeCard = cardsList[activeCardIndex];
 
-		const inactiveCardsList = cardsList.filter((card, index) => (index === activeCardIndex ? false : card));
+		const inactiveCardsList = cardsList.filter((card, index) => index === activeCardIndex ? false : card);
 		const filteredHistory = cardHistory.filter((data) => data.cardId === activeCard.id);
 
 		return (
@@ -135,11 +135,13 @@ class App extends Component {
 						<Prepaid
 							activeCard={activeCard}
 							inactiveCardsList={inactiveCardsList}
-							onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)} />
+							onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)}
+						/>
 						<MobilePayment activeCard={activeCard} />
 						<Withdraw
 							activeCard={activeCard}
-							inactiveCardsList={inactiveCardsList} />
+							inactiveCardsList={inactiveCardsList}
+						/>
 					</Workspace>
 				</CardPane>
 			</Wallet>
