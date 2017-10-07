@@ -40,6 +40,7 @@
     "babel-preset-react": "^6.24.1",
     "card-info": "git+https://github.com/iniel/card-info.git",
     "css-loader": "^0.28.7",
+    "csso-loader": "^0.3.1",
     "emotion": "^7.2.0",
     "emotion-server": "^7.3.2",
     "eslint": "^4.7.0",
@@ -52,8 +53,11 @@
     "ignore-loader": "^0.1.2",
     "log4js": "^2.3.4",
     "moment": "^2.18.1",
+    "postcss-loader": "^2.0.6",
     "react-emotion": "^7.2.0",
     "style-loader": "^0.18.2",
+    "stylelint": "^8.2.0",
+    "stylelint-config-recommended": "^1.0.0",
     "url-loader": "^0.5.9",
     "webpack": "^3.5.5"
   }
