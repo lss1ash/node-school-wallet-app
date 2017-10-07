@@ -13,8 +13,8 @@ module.exports = [
 			rules: [
 				{
 					test: /\.js$/,
-					// include: [path.resolve(__dirname, 'source')],
-					exclude: /node_modules/,
+					include: [path.resolve(__dirname, 'source')],
+					// exclude: /node_modules/,
 					use: [
 						'babel-loader',
 						'eslint-loader'
@@ -49,8 +49,8 @@ module.exports = [
 			rules: [
 				{
 					test: /\.js$/,
-					// include: [path.resolve(__dirname, 'source')],
-					exclude: /node_modules/,
+					include: [path.resolve(__dirname, 'source')],
+					// exclude: /node_modules/,
 					use: [
 						'babel-loader',
 						'eslint-loader'
