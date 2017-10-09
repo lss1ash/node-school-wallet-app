@@ -25,6 +25,21 @@ class Cards {
 		return this._cards;
 	}
 
+	async updateBalance(cardId, amount) {
+		const cardArrId = this._cards.findIndex((item) => item.id === cardId);
+		if (cardArrId > 0) {
+			try {
+				this._cards[cardArrId].balance = +this._cards[cardArrId].balance + amount;
+				await file.write(this._dataSource, this._cards);
+				return true;
+			} catch (err) {
+				logger.log('ERROR', 'Error updating card balance', err);
+				return false;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Добавляет карту
 	 *
@@ -83,7 +98,7 @@ class Cards {
 	}
 
 	existsId(cardId) {
-		const foundOne = this._cards.find((item, index) => index === cardId);
+		const foundOne = this._cards.find((item) => item.id === cardId);
 		if (foundOne) {
 			return true;
 		}

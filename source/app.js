@@ -10,6 +10,7 @@ const getAppController = require('./controllers/app/get-root');
 const getCardsController = require('./controllers/cards/get-cards');
 const createCardController = require('./controllers/cards/create-card');
 const deleteCardController = require('./controllers/cards/delete-card');
+const payMobileController = require('./controllers/cards/pay-mobile');
 const errorController = require('./controllers/error');
 
 const getTransactionsController = require('./controllers/transactions/get-transactions');
@@ -30,6 +31,8 @@ router.get('/', getAppController);
 router.get('/cards/', getCardsController);
 router.post('/cards/', createCardController);
 router.delete('/cards/:id', deleteCardController);
+
+router.post('/cards/:id/pay', payMobileController);
 
 router.get('/cards/:id/transactions', getTransactionsController);
 router.post('/cards/:id/transactions', createTransactionController);
