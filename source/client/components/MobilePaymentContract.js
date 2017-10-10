@@ -115,7 +115,46 @@ class MobilePaymentContract extends Component {
 			return;
 		}
 
-		this.props.onPaymentSuccess({sum, phoneNumber, commission});
+		// try {
+		// 	const response = await fetch(`/cards/${this.props.activeCard.id}/pay`, {
+		// 		method: 'POST',
+		// 		headers: {
+		// 			'Content-Type': 'application/json'
+		// 		},
+		// 		body: JSON.stringify({
+		// 			amount: this.getSumWithCommission().toString(),
+		// 			data: phoneNumber
+		// 		})
+		// 	});
+		//
+		// 	console.log(`response: ${response}`);
+		// 	console.log(`response.status: ${response.status}`);
+		//
+		// 	this.props.onPaymentSuccess({sum, phoneNumber, commission});
+		//
+		// } catch(error) {
+		// 	console.log('some error happened!');
+		// }
+
+	const callback = this.props.onPaymentSuccess;
+	fetch(`/cards/${this.props.activeCard.id}/pay`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			amount: this.getSumWithCommission().toString(),
+			data: phoneNumber
+		})
+	})
+  .then(function(json) {
+		console.log(`response: ${json}`);
+		console.log(`response.status: ${json.status}`);
+
+		callback({sum, phoneNumber, commission});
+	})
+  .catch(function(error) { console.log(error); });
+		console.log('error happened!');
 	}
 
 	/**

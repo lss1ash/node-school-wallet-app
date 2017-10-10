@@ -59,6 +59,18 @@ class Transactions {
 	static remove() {
 		throw new ApplicationError('Card removing is prohibited!', 400);
 	}
+
+	// eslint-disable-next-line
+	getTransactionTemplate(cardId = 0, type = '', data = '', sum = '') {
+		return {
+			cardId,
+			type,
+			data,
+			sum,
+			id: 0,
+			time: ''
+		};
+	}
 }
 
 module.exports = Transactions;

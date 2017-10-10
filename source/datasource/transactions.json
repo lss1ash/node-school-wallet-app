@@ -179,7 +179,7 @@
     "cardId": 1,
     "type": "paymentMobile",
     "data": "+7(012)345-67-89",
-    "sum": 10,
+    "sum": "10",
     "id": 23,
     "time": "2017-9-9T16:48:35"
   },
@@ -187,120 +187,56 @@
     "cardId": 1,
     "type": "paymentMobile",
     "data": "+7(012)345-67-89",
-    "sum": 10,
+    "sum": "10",
     "id": 24,
     "time": "2017-9-9T17:0:21"
   },
   {
     "cardId": 1,
     "type": "paymentMobile",
-    "data": "+7(012)345-67-89",
-    "sum": 10,
+    "data": "+7(123)890-00-55",
+    "sum": "10",
     "id": 25,
-    "time": "2017-9-9T17:1:43"
+    "time": "2017-9-10T23:50:38"
   },
   {
     "cardId": 1,
     "type": "paymentMobile",
-    "data": "+7(012)345-67-89",
-    "sum": 10,
+    "data": "+7(123)890-00-55",
+    "sum": "10",
     "id": 26,
-    "time": "2017-9-9T17:2:51"
+    "time": "2017-9-10T23:52:30"
   },
   {
     "cardId": 1,
     "type": "paymentMobile",
-    "data": "+7(012)345-67-89",
-    "sum": 10,
+    "data": "+7(123)890-00-55",
+    "sum": "10",
     "id": 27,
-    "time": "2017-9-9T17:11:5"
+    "time": "2017-9-10T23:52:46"
   },
   {
     "cardId": 1,
     "type": "paymentMobile",
-    "data": "+7(012)345-67-89",
-    "sum": 10,
+    "data": "+79218908064",
+    "sum": "763",
     "id": 28,
-    "time": "2017-9-9T17:12:29"
-  },
-  {
-    "cardId": 1,
-    "type": "paymentMobile",
-    "data": "+666(012)345-67-89",
-    "sum": 10,
-    "id": 29,
-    "time": "2017-9-9T17:38:43"
-  },
-  {
-    "cardId": 1,
-    "type": "paymentMobile",
-    "data": "+666(012)345-67-89",
-    "sum": 10,
-    "id": 30,
-    "time": "2017-9-9T17:41:25"
-  },
-  {
-    "cardId": 1,
-    "type": "paymentMobile",
-    "data": "+666(012)345-67-89",
-    "sum": -10,
-    "id": 31,
-    "time": "2017-9-9T17:44:38"
-  },
-  {
-    "cardId": 1,
-    "type": "paymentMobile",
-    "data": "+666(012)345-67-89",
-    "sum": -10,
-    "id": 32,
-    "time": "2017-9-9T18:8:8"
-  },
-  {
-    "cardId": 1,
-    "type": "paymentMobile",
-    "data": "+666(012)345-67-89",
-    "sum": -10,
-    "id": 33,
-    "time": "2017-9-9T18:8:36"
-  },
-  {
-    "cardId": 1,
-    "type": "paymentMobile",
-    "data": "+666(012)345-67-89",
-    "sum": -10,
-    "id": 34,
-    "time": "2017-9-9T18:10:14"
-  },
-  {
-    "cardId": 1,
-    "type": "paymentMobile",
-    "data": "+666(012)345-67-89",
-    "sum": -10,
-    "id": 35,
-    "time": "2017-9-9T18:10:37"
-  },
-  {
-    "cardId": 1111,
-    "type": "paymentMobile",
-    "data": "+666(012)345-67-89",
-    "sum": -10,
-    "id": 36,
-    "time": "2017-9-9T18:10:47"
-  },
-  {
-    "cardId": 1111,
-    "type": "paymentMobile",
-    "data": "+666(012)345-67-89",
-    "sum": -10,
-    "id": 37,
-    "time": "2017-9-9T18:12:13"
+    "time": "2017-9-11T1:7:22"
   },
   {
     "cardId": 2,
     "type": "paymentMobile",
-    "data": "+666(012)345-67-89",
-    "sum": -10,
-    "id": 38,
-    "time": "2017-9-9T18:12:34"
+    "data": "+79218908064",
+    "sum": "16",
+    "id": 29,
+    "time": "2017-9-11T1:17:55"
+  },
+  {
+    "cardId": 1,
+    "type": "paymentMobile",
+    "data": "+79218908064",
+    "sum": "446",
+    "id": 30,
+    "time": "2017-9-11T1:28:58"
   }
 ]

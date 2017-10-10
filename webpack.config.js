@@ -2,7 +2,7 @@
 // use: env === 'production' ? 'css-loader&minimize=true' : 'css-loader'
 
 const path = require('path');
-const webpack = require('webpack');
+// const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = [
@@ -40,8 +40,9 @@ module.exports = [
 			]
 		},
 		plugins: [
-			new ExtractTextPlugin('style.css'),
-			new webpack.optimize.UglifyJsPlugin()
+			new ExtractTextPlugin('style.css')
+			// ,
+			// new webpack.optimize.UglifyJsPlugin()
 		]
 	},
 	{
