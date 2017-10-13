@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import MobilePaymentContract from './MobilePaymentContract';
 import MobilePaymentSuccess from './MobilePaymentSuccess';
+// import MobilePaymentReject from './MobilePaymentReject';
 
 /**
  * Класс компонента MobilePayment
@@ -26,6 +27,17 @@ class MobilePayment extends Component {
 		this.setState({
 			stage: 'success',
 			transaction
+		});
+	}
+
+	/**
+	 * Обработка неуспешного платежа
+	 * @param {Object} response данные об ответе
+	 */
+	onPaymentReject(response) {
+		this.setState({
+			stage: 'reject',
+			response
 		});
 	}
 
@@ -54,11 +66,26 @@ class MobilePayment extends Component {
 			);
 		}
 
+		if (this.state.stage === 'reject') {
+			return (
+				<MobilePaymentReject
+					activeCard={activeCard}
+					response={this.state.response}
+					repeatPayment={() => this.repeatPayment()} />
+			);
+		}
+
 		return (
 			<MobilePaymentContract
 				activeCard={activeCard}
 				onPaymentSuccess={(transaction) => this.onPaymentSuccess(transaction)} />
 		);
+		// return (
+		// 	<MobilePaymentContract
+		// 		activeCard={activeCard}
+		// 		onPaymentSuccess={(transaction) => this.onPaymentSuccess(transaction)}
+		// 		onPaymentReject={(response) => this.onPaymentReject(response)} />
+		// );
 	}
 }
 

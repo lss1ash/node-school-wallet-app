@@ -115,7 +115,7 @@ class MobilePaymentContract extends Component {
 			return;
 		}
 
-		const callback = this.props.onPaymentSuccess;
+		const context = this;
 		fetch(`/cards/${this.props.activeCard.id}/pay`, {
 			method: 'POST',
 			headers: {
@@ -126,14 +126,24 @@ class MobilePaymentContract extends Component {
 				data: phoneNumber
 			})
 		})
-			.then((json) => {
-				console.log(`response: ${json}`);
-				console.log(`response.status: ${json.status}`);
-
-				callback({sum, phoneNumber, commission});
-			})
-			.catch((error) => { console.log(error); });
-		console.log('error happened!');
+		.catch(function(error) {
+			console.log('error.message has been passed');
+		})
+	  .then(function(response) {
+			if (!response) {
+				return;
+			}
+			if (response.status === 201) {
+				context.props.onPaymentSuccess({sum, phoneNumber, commission});
+			}	else {
+				console.log(`${response.status}:  ${response.body}`);
+				// context.props.onPaymentReject({status: response.status, message: response.body});
+			}
+		})
+		.catch(function(error) {
+			console.log('second error.message has been passed');
+			// context.props.onPaymentReject({status: 400, message: 'Не удалось выполнить запрос к серверу'});
+		});
 	}
 
 	/**
@@ -193,13 +203,13 @@ class MobilePaymentContract extends Component {
 		);
 	}
 }
-
 MobilePaymentContract.propTypes = {
 	activeCard: PropTypes.shape({
 		id: PropTypes.number,
-		theme: PropTypes.object
 	}).isRequired,
 	onPaymentSuccess: PropTypes.func.isRequired
+	// ,
+	// onPaymentReject: PropTypes.func.isRequired
 };
 
 export default MobilePaymentContract;

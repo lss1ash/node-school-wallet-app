@@ -29,12 +29,17 @@ class Cards {
 		const cardArrId = this._cards.findIndex((item) => item.id === cardId);
 		if (cardArrId >= 0) {
 			try {
+				if (+this._cards[cardArrId].balance + amountDelta < 0) {
+					return {updated: false, message: 'Недостаточно средств на карте'};
+				}
+
 				this._cards[cardArrId].balance = (+this._cards[cardArrId].balance + amountDelta).toString();
 				await file.write(this._dataSource, this._cards);
-				return true;
+
+				return {updated: true, message: 'Успешное обновление баланса карты'};
 			} catch (err) {
 				logger.log('ERROR', 'Error updating card balance', err);
-				return false;
+				return {updated: false, message: 'Ошибка обновления баланса карты'};
 			}
 		}
 		return false;

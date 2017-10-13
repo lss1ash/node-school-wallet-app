@@ -51,8 +51,8 @@ class Transactions {
 			await file.write(this._dataSource, this._transactions);
 			return transaction;
 		}
-		// throw new ApplicationError('Card data is invalid!', 400);
-		logger.log('warn', 'Данные карты недействительны');
+		logger.log('warn', 'Не удалось создать транзакцию: данные карты недействительны');
+		// throw new ApplicationError('Не удалось создать транзакцию: данные карты недействительны!', 400);
 		return null;
 	}
 
