@@ -11,4 +11,5 @@ module.exports = async (ctx) => {
 	const response = await payment.process();
 	ctx.status = response.status;
 	ctx.body = response.body;
+	// ПРАВИТ НАЗНАЧЕНИЕ ТУТ!!!!
 };

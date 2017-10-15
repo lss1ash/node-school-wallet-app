@@ -78,18 +78,20 @@ class Payment {
 			const transactionDone = await this._makeTransaction();
 			if (transactionDone) {
 				response.status = 201;
-				response.body = transactionDone;
+				response.body = {transaction: transactionDone};
 			} else {
 				response.status = 500;
-				response.body = `Не удалось создать транзакцию по карте ${this.cardId} на сумму ${this.amount}`;
-				logger.log('error', `${response.body}`);
+				response.body = {
+					message: `Не удалось создать транзакцию по карте ${this.cardId} на сумму ${this.amount}`
+				};
 				this._rollback();
 			}
 		}	else {
 			response.status = 500;
-			response.body = 'Не удалось выполнить операцию по карте' +
-				` ${this.params.cardId} на сумму ${this.params.amount}!\n${balance.message}`;
-			logger.log('error', `${response.body}`);
+			response.body = {
+				message: 'Не удалось выполнить операцию по карте' +
+						` ${this.params.cardId} на сумму ${this.params.amount}!\n${balance.message}`
+			};
 		}
 		return response;
 	}

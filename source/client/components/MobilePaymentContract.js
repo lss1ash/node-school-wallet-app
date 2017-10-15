@@ -115,7 +115,6 @@ class MobilePaymentContract extends Component {
 			return;
 		}
 
-		const context = this;
 		fetch(`/cards/${this.props.activeCard.id}/pay`, {
 			method: 'POST',
 			headers: {
@@ -126,23 +125,25 @@ class MobilePaymentContract extends Component {
 				data: phoneNumber
 			})
 		})
-		.catch(function(error) {
-			console.log('error.message has been passed');
+		.catch((error) => {
+			this.props.onPaymentReject({status: 400, message: 'При выполнении запроса к серверу произошла непредвиденная ошибка'});
 		})
-	  .then(function(response) {
-			if (!response) {
-				return;
-			}
-			if (response.status === 201) {
-				context.props.onPaymentSuccess({sum, phoneNumber, commission});
-			}	else {
-				console.log(`${response.status}:  ${response.body}`);
-				// context.props.onPaymentReject({status: response.status, message: response.body});
+	  .then((response) => {
+			if (response) {
+				if (response.status === 201) {
+					response.json().then(transactionBody => this.props.onPaymentSuccess({
+						sum: this.getSumWithCommission(),
+						phoneNumber: transactionBody.data,
+						commission,
+						transactionNumber: transactionBody.id
+					}));
+				}	else {
+					response.json().then(body => this.props.onPaymentReject({status: response.status, message: body.message}));
+				}
 			}
 		})
-		.catch(function(error) {
-			console.log('second error.message has been passed');
-			// context.props.onPaymentReject({status: 400, message: 'Не удалось выполнить запрос к серверу'});
+		.catch((error) => {
+			this.props.onPaymentReject({status: 400, message: 'При выполнении запроса к серверу произошла непредвиденная ошибка'});
 		});
 	}
 
@@ -179,8 +180,7 @@ class MobilePaymentContract extends Component {
 						<Label>Телефон</Label>
 						<InputPhoneNumber
 							name='phoneNumber'
-							value={this.state.phoneNumber}
-							readOnly='true' />
+							defaultValue={this.state.phoneNumber} />
 					</InputField>
 					<InputField>
 						<Label>Сумма</Label>
@@ -207,9 +207,8 @@ MobilePaymentContract.propTypes = {
 	activeCard: PropTypes.shape({
 		id: PropTypes.number,
 	}).isRequired,
-	onPaymentSuccess: PropTypes.func.isRequired
-	// ,
-	// onPaymentReject: PropTypes.func.isRequired
+	onPaymentSuccess: PropTypes.func.isRequired,
+	onPaymentReject: PropTypes.func.isRequired
 };
 
 export default MobilePaymentContract;

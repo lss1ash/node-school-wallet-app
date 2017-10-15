@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import MobilePaymentContract from './MobilePaymentContract';
 import MobilePaymentSuccess from './MobilePaymentSuccess';
-// import MobilePaymentReject from './MobilePaymentReject';
+import MobilePaymentReject from './MobilePaymentReject';
 
 /**
  * Класс компонента MobilePayment
@@ -78,14 +78,9 @@ class MobilePayment extends Component {
 		return (
 			<MobilePaymentContract
 				activeCard={activeCard}
-				onPaymentSuccess={(transaction) => this.onPaymentSuccess(transaction)} />
+				onPaymentSuccess={(transaction) => this.onPaymentSuccess(transaction)}
+				onPaymentReject={(response) => this.onPaymentReject(response)} />
 		);
-		// return (
-		// 	<MobilePaymentContract
-		// 		activeCard={activeCard}
-		// 		onPaymentSuccess={(transaction) => this.onPaymentSuccess(transaction)}
-		// 		onPaymentReject={(response) => this.onPaymentReject(response)} />
-		// );
 	}
 }
 
