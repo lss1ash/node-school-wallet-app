@@ -58,10 +58,7 @@ class App extends Component {
 		super();
 
 		const cardsList = this.prepareCardsData(cardsData);
-		const cardHistory = transactionsData.map((data) => {
-			const card = cardsList.find((card) => card.id === data.cardId);
-			return card ? Object.assign({}, data, {card}) : data;
-		});
+		const cardHistory = this.prepareTransactionsData(cardsList);
 
 		this.state = {
 			cardsList,
@@ -96,6 +93,13 @@ class App extends Component {
 					bankSmLogoUrl: `/assets/${cardInfo.bankAlias}-history.svg`
 				}
 			};
+		});
+	}
+
+	prepareTransactionsData(cardsList) {
+		return transactionsData.map((data) => {
+			const card = cardsList.find((card) => card.id === data.cardId);
+			return card ? Object.assign({}, data, {card}) : data;
 		});
 	}
 

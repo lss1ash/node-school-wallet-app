@@ -180,7 +180,8 @@ class MobilePaymentContract extends Component {
 						<Label>Телефон</Label>
 						<InputPhoneNumber
 							name='phoneNumber'
-							defaultValue={this.state.phoneNumber} />
+							defaultValue={this.state.phoneNumber}
+							onChange={(event) => this.handleInputChange(event)} />
 					</InputField>
 					<InputField>
 						<Label>Сумма</Label>
