@@ -43,7 +43,8 @@ module.exports = [
 			new ExtractTextPlugin('style.css')
 			// ,
 			// new webpack.optimize.UglifyJsPlugin()
-		]
+		],
+		watch: true
 	},
 	{
 		entry: './source/views/server/',
@@ -68,6 +69,7 @@ module.exports = [
 					use: 'ignore-loader'
 				}
 			]
-		}
+		},
+		watch: true
 	}
 ];
