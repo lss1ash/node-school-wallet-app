@@ -1,7 +1,7 @@
 'use strict';
 
 // const path = require('path');
-const logger = require('../../libs/logger')('wallet-app:payment');
+// const logger = require('../../libs/logger')('wallet-app:payment');
 // const ApplicationError = require('../libs/application-error');
 
 class Payment {

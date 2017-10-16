@@ -128,14 +128,14 @@ class MobilePaymentContract extends Component {
 		.catch((error) => {
 			this.props.onPaymentReject({status: 400, message: 'При выполнении запроса к серверу произошла непредвиденная ошибка'});
 		})
-	  .then((response) => {
+		.then((response) => {
 			if (response) {
 				if (response.status === 201) {
-					response.json().then(transactionBody => this.props.onPaymentSuccess({
+					response.json().then(body => this.props.onPaymentSuccess({
 						sum: this.getSumWithCommission(),
-						phoneNumber: transactionBody.data,
+						phoneNumber: body.transaction.data,
 						commission,
-						transactionNumber: transactionBody.id
+						transactionNumber: body.transaction.id
 					}));
 				}	else {
 					response.json().then(body => this.props.onPaymentReject({status: response.status, message: body.message}));
