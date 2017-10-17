@@ -54,13 +54,13 @@ class Prepaid extends Component {
 
 		if (this.state.stage === 'success') {
 			return (
-				<PrepaidSuccess transaction={transaction} repeatPayment={() => this.repeatPayment()} />
+				<PrepaidSuccess transaction={this.state.transaction} repeatPayment={() => this.repeatPayment()} />
 			);
 		}
 
 		if (this.state.stage === 'reject') {
 			return (
-				<PrepaidSuccess response={response} repeatPayment={() => this.repeatPayment()} />
+				<PrepaidReject response={this.state.response} repeatPayment={() => this.repeatPayment()} />
 			);
 		}
 
@@ -68,7 +68,8 @@ class Prepaid extends Component {
 			<PrepaidContract
 				activeCard={activeCard}
 				// inactiveCardsList={inactiveCardsList}
-				onPaymentSuccess={(transaction) => this.onPaymentSuccess(transaction)} />
+				onPaymentSuccess={(transaction) => this.onPaymentSuccess(transaction)}
+				onPaymentReject={(response) => this.onPaymentReject(response)} />
 		);
 	}
 }

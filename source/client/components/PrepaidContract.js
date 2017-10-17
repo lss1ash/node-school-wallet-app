@@ -243,7 +243,8 @@ PrepaidContract.propTypes = {
 		theme: PropTypes.object
 	}).isRequired,
 	// inactiveCardsList: PropTypes.arrayOf(PropTypes.object).isRequired,
-	onPaymentSuccess: PropTypes.func.isRequired
+	onPaymentSuccess: PropTypes.func.isRequired,
+	onPaymentReject: PropTypes.func.isRequired
 };
 
 export default PrepaidContract;
