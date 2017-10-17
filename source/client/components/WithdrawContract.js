@@ -91,7 +91,7 @@ class WithdrawContract extends Component {
 			},
 			body: JSON.stringify({
 				amount: sum.toString(),
-				data: selectedCard.number
+				data: selectedCard.id
 			})
 		})
 		.catch((error) => {
@@ -150,7 +150,7 @@ WithdrawContract.propTypes = {
 		id: PropTypes.number,
 		theme: PropTypes.object
 	}).isRequired,
-	inactiveCardsList: PropTypes.arrayOf(PropTypes.object).WithdrawContract
+	inactiveCardsList: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default WithdrawContract;
