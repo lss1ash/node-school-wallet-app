@@ -39,6 +39,7 @@ class Payment {
 			this.params.amount = -this.params.amount;
 			this.params.paymentType = this.TYPES_WITHDRAW[this.params.paymentType];
 		} else {
+			this.params.amount = +this.params.amount;
 			this.params.paymentType = this.TYPES_FILLUP[this.params.paymentType];
 		}
 		return true;

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import PrepaidContract from './PrepaidContract';
 import PrepaidSuccess from './PrepaidSuccess';
+import PrepaidReject from './PrepaidReject';
 
 /**
  * Класс компонента Prepaid
@@ -29,6 +30,13 @@ class Prepaid extends Component {
 		});
 	}
 
+	onPaymentReject(response) {
+		this.setState({
+			stage: 'reject',
+			response
+		});
+	}
+
 	/**
 	 * Повторить платеж
 	 */
@@ -50,10 +58,16 @@ class Prepaid extends Component {
 			);
 		}
 
+		if (this.state.stage === 'reject') {
+			return (
+				<PrepaidSuccess response={response} repeatPayment={() => this.repeatPayment()} />
+			);
+		}
+
 		return (
 			<PrepaidContract
 				activeCard={activeCard}
-				inactiveCardsList={inactiveCardsList}
+				// inactiveCardsList={inactiveCardsList}
 				onPaymentSuccess={(transaction) => this.onPaymentSuccess(transaction)} />
 		);
 	}
