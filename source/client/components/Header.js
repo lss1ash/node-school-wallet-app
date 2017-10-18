@@ -24,13 +24,18 @@ const BalanceSum = styled.span`
 
 const Header = ({activeCard, user}) => (
 	<HeaderLayout>
-		<Balance>
-			{`${activeCard.bankName}: `}
-			<BalanceSum>{`${activeCard.balance} ₽`}</BalanceSum>
-		</Balance>
 		<UserInfo user={user} />
 	</HeaderLayout>
 );
+// const Header = ({activeCard, user}) => (
+// 	<HeaderLayout>
+// 		<Balance>
+// 			{`${activeCard.bankName}: `}
+// 			<BalanceSum>{`${activeCard.balance} ₽`}</BalanceSum>
+// 		</Balance>
+// 		<UserInfo user={user} />
+// 	</HeaderLayout>
+// );
 
 Header.propTypes = {
 	activeCard: PropTypes.shape({

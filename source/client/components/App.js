@@ -9,7 +9,8 @@ import {
 	History,
 	Prepaid,
 	MobilePayment,
-	Withdraw
+	Withdraw,
+	getData
 } from './';
 
 import './fonts.css';
@@ -57,8 +58,13 @@ class App extends Component {
 	constructor() {
 		super();
 
+		// const cardsList = this.prepareCardsData(this.getAllCardsData());
+		// const cardHistory = this.prepareTransactionsData(cardsList, this.getAllTransactionsData());
+
 		const cardsList = this.prepareCardsData(cardsData);
-		const cardHistory = this.prepareTransactionsData(cardsList);
+		const cardHistory = this.prepareTransactionsData(cardsList, transactionsData);
+
+		this.getAllCardsData();
 
 		this.state = {
 			cardsList,
@@ -96,7 +102,7 @@ class App extends Component {
 		});
 	}
 
-	prepareTransactionsData(cardsList) {
+	prepareTransactionsData(cardsList, transactionsData) {
 		return transactionsData.map((data) => {
 			const card = cardsList.find((card) => card.id === data.cardId);
 			return card ? Object.assign({}, data, {card}) : data;
@@ -111,6 +117,41 @@ class App extends Component {
 	onCardChange(activeCardIndex) {
 		this.setState({activeCardIndex});
 	}
+
+	getAllCardsData() {
+		fetch(`/cards/`, {
+			method: 'GET',
+		})
+		.then((response) => {
+			if (response.status === 200) {
+				// let cards = [];
+				response.json().then(body => body);
+				// return cards;
+				// response.json().then(cardsData => this.setState({cardsList: this.prepareCardsData(cardsData)}));
+			}
+		})
+		.catch((error) => {
+			console.log('OMG! Smthng went wrong!');
+		});
+	}
+
+	getAllTransactionsData() {
+		// window.fetch(`/cards/all/transactions`, {
+		// 	method: 'GET',
+		// })
+		// .then((response) => {
+		// 	if (response.status === 200) {
+		// 		let transactions = [];
+		// 		response.json().then(body => transactions = body);
+		// 		return transactions;
+		// 	}
+		// })
+		// .catch((error) => {
+		// 	console.log('OMG! Smthng went wrong!');
+		// });
+	}
+
+
 
 	/**
 	 * Рендер компонента

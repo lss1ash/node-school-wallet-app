@@ -15,9 +15,9 @@ class Transactions {
 	}
 
 	async getAll() {
-		if (!this._transactions) {
-			this._transactions = JSON.parse(await file.read(this._dataSource));
-		}
+		// if (!this._transactions) {
+		this._transactions = JSON.parse(await file.read(this._dataSource));
+		// }
 		return this._transactions;
 	}
 

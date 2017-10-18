@@ -24,15 +24,22 @@ const CardLogo = styled.div`
 `;
 
 const CardNumber = styled.div`
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 	color: ${({active, textColor}) => (active ? textColor : 'rgba(255, 255, 255, 0.6)')};
 	font-size: 15px;
 	font-family: 'OCR A Std Regular';
 	white-space: nowrap;
 `;
 
+const CardBalance = styled.div`
+	color: ${({active, textColor}) => (active ? textColor : 'rgba(255, 255, 255, 0.6)')};
+	font-size: 24px;
+	float: left;
+	white-space: nowrap;
+`;
+
 const CardType = styled.div`
-	height: 26px;
+	height: 32px;
 	background-image: url(${({url}) => url});
 	background-size: contain;
 	background-repeat: no-repeat;
@@ -116,7 +123,7 @@ class Card extends Component {
 			);
 		}
 
-		const {number, theme} = data;
+		const {number, balance, theme} = data;
 		const {
 			bgColor, textColor, bankLogoUrl, brandLogoUrl
 		} = theme;
@@ -125,9 +132,8 @@ class Card extends Component {
 		return (
 			<CardLayout active={active} bgColor={bgColor} onClick={onClick} >
 				<CardLogo url={bankLogoUrl} active={active} />
-				<CardNumber textColor={textColor} active={active}>
-					{number}
-				</CardNumber>
+				<CardNumber textColor={textColor} active={active}>{number}</CardNumber>
+				<CardBalance textColor={textColor} active={active}>{balance} ₽</CardBalance>
 				<CardType url={themedBrandLogoUrl} active={active} />
 			</CardLayout>
 		);

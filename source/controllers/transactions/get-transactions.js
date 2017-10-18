@@ -3,10 +3,15 @@
 const logger = require('../../libs/logger')('wallet-app');
 
 module.exports = async (ctx) => {
-	const transactions = await ctx.Transactions.get(ctx.params.id);
+	let transactions = [];
+	if (ctx.params.id.toLowerCase() === 'all') {
+		transactions = await ctx.Transactions.getAll();
+	} else {
+		transactions = await ctx.Transactions.get(ctx.params.id);
+	}
 	if (transactions) {
 		ctx.body = transactions;
-		ctx.status = 201;
+		ctx.status = 200;
 		return;
 	}
 	logger.log('info', `Не найдены транзакции по карте ${ctx.params.id}`);
