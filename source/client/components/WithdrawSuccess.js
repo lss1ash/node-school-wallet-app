@@ -92,7 +92,7 @@ const WithdrawSuccess = ({transaction, repeatPayment}) => {
 
 WithdrawSuccess.propTypes = {
 	transaction: PropTypes.shape({
-		sum: PropTypes.number,
+		sum: PropTypes.string,
 		cardNumber: PropTypes.string,
 		transactionNumber: PropTypes.string
 	}).isRequired,

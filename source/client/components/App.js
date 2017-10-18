@@ -157,7 +157,9 @@ class App extends Component {
 				<CardPane>
 					<Header activeCard={activeCard} user={data.user} />
 					<Workspace>
-						<History cardHistory={filteredHistory} />
+						<History
+							cardHistory={filteredHistory}
+							cardsList={cardsList} />
 						<Prepaid
 							activeCard={activeCard}
 							inactiveCardsList={inactiveCardsList}

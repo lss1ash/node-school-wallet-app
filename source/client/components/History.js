@@ -6,7 +6,7 @@ import moment from 'moment';
 import {Island} from './';
 
 const HistoryLayout = styled(Island)`
-	max-height: 622px;
+	max-height: 440px;
 	overflow-y: scroll;
 	padding: 0;
 	background-color: rgba(0, 0, 0, 0.05);
@@ -69,7 +69,7 @@ const HistoryItemSum = styled.div`
 	text-overflow: ellipsis;
 `;
 
-const History = ({cardHistory}) => {
+const History = ({cardHistory, cardsList}) => {
 	const getHistoryItemTitle = (item) => {
 		let typeTitle = '';
 
@@ -94,6 +94,14 @@ const History = ({cardHistory}) => {
 		return `${typeTitle}`;
 	};
 
+	const getHistoryAdditionalInfo = (item) => {
+		if (item.type === 'card2Card') {
+				const correspondingCard = cardsList.find(card => card.id.toString() === item.data.toString());
+				return correspondingCard ? correspondingCard.number : undefined;
+		}
+		return item.data;
+	};
+
 	return (
 		<HistoryLayout>
 			<HistoryTitle>Сегодня</HistoryTitle>
@@ -112,7 +120,7 @@ const History = ({cardHistory}) => {
 						<HistoryItemTitle>
 							{getHistoryItemTitle(item)}
 							<HistoryItemTitle>
-								{item.data}
+								{getHistoryAdditionalInfo(item)}
 							</HistoryItemTitle>
 						</HistoryItemTitle>
 						<HistoryItemTime>
@@ -129,7 +137,8 @@ const History = ({cardHistory}) => {
 };
 
 History.propTypes = {
-	cardHistory: PropTypes.arrayOf(PropTypes.object).isRequired
+	cardHistory: PropTypes.arrayOf(PropTypes.object).isRequired,
+	cardsList: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default History;
