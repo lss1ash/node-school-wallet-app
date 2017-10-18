@@ -6,6 +6,7 @@ import {Card, Title, Button, Island, Input} from './';
 
 const WithdrawTitle = styled(Title)`
 	text-align: center;
+	color: #fff;
 `;
 
 const WithdrawLayout = styled(Island)`
@@ -24,8 +25,8 @@ const InputField = styled.div`
 const SumInput = styled(Input)`
 	max-width: 200px;
 	padding-right: 20px;
-	background-color: rgba(0, 0, 0, 0.08);
-	color: '#000';
+	background-color: rgba(0, 0, 0, 0.10);
+	color: '#fff';
 `;
 
 const Currency = styled.span`
@@ -129,7 +130,8 @@ class WithdrawContract extends Component {
 					<WithdrawTitle>Перевести с карты на карту</WithdrawTitle>
 					<Card
 						type='select'
-						data={inactiveCardsList} />
+						data={inactiveCardsList}
+						setSelectedCard={selectedCardIndex => this.setState({selectedCard: inactiveCardsList[selectedCardIndex]})} />
 					<InputField>
 						<SumInput
 							name='sum'
