@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import styled from 'emotion/react';
 import {injectGlobal} from 'emotion';
@@ -9,8 +10,7 @@ import {
 	History,
 	Prepaid,
 	MobilePayment,
-	Withdraw,
-	getData
+	Withdraw
 } from './';
 
 import './fonts.css';
@@ -58,13 +58,8 @@ class App extends Component {
 	constructor() {
 		super();
 
-		// const cardsList = this.prepareCardsData(this.getAllCardsData());
-		// const cardHistory = this.prepareTransactionsData(cardsList, this.getAllTransactionsData());
-
 		const cardsList = this.prepareCardsData(cardsData);
 		const cardHistory = this.prepareTransactionsData(cardsList, transactionsData);
-
-		this.getAllCardsData();
 
 		this.state = {
 			cardsList,
@@ -109,6 +104,26 @@ class App extends Component {
 		});
 	}
 
+	getAllCardsData() {
+		return axios.get('/cards/');
+	}
+
+	getAllTransactionsData() {
+		return axios.get('/cards/all/transactions');
+	}
+
+	getAllBankingData() {
+		axios.all([this.getAllCardsData(), this.getAllTransactionsData()])
+		  .then(axios.spread((cards, transactions) => {
+				const cardsList = this.prepareCardsData(cards.data);
+				const cardHistory = this.prepareTransactionsData(cardsList, transactions.data);
+				this.setState({cardsList, cardHistory});
+		  }))
+			.catch(error => {
+				console.error('Не удалось загрузить данные с сервера:', error.message);
+			});
+	}
+
 	/**
 	 * Обработчик переключения карты
 	 *
@@ -116,42 +131,8 @@ class App extends Component {
 	 */
 	onCardChange(activeCardIndex) {
 		this.setState({activeCardIndex});
+		// this.getAllBankingData();
 	}
-
-	getAllCardsData() {
-		fetch(`/cards/`, {
-			method: 'GET',
-		})
-		.then((response) => {
-			if (response.status === 200) {
-				// let cards = [];
-				response.json().then(body => body);
-				// return cards;
-				// response.json().then(cardsData => this.setState({cardsList: this.prepareCardsData(cardsData)}));
-			}
-		})
-		.catch((error) => {
-			console.log('OMG! Smthng went wrong!');
-		});
-	}
-
-	getAllTransactionsData() {
-		// window.fetch(`/cards/all/transactions`, {
-		// 	method: 'GET',
-		// })
-		// .then((response) => {
-		// 	if (response.status === 200) {
-		// 		let transactions = [];
-		// 		response.json().then(body => transactions = body);
-		// 		return transactions;
-		// 	}
-		// })
-		// .catch((error) => {
-		// 	console.log('OMG! Smthng went wrong!');
-		// });
-	}
-
-
 
 	/**
 	 * Рендер компонента
@@ -180,11 +161,15 @@ class App extends Component {
 						<Prepaid
 							activeCard={activeCard}
 							inactiveCardsList={inactiveCardsList}
+							onSuccess={() => this.getAllBankingData()}
 							onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)} />
-						<MobilePayment activeCard={activeCard} />
+						<MobilePayment
+							activeCard={activeCard}
+							onSuccess={() => this.getAllBankingData()}/>
 						<Withdraw
 							activeCard={activeCard}
-							inactiveCardsList={inactiveCardsList} />
+							inactiveCardsList={inactiveCardsList}
+							onSuccess={() => this.getAllBankingData()} />
 					</Workspace>
 				</CardPane>
 			</Wallet>

@@ -6,11 +6,15 @@ import moment from 'moment';
 import {Island} from './';
 
 const HistoryLayout = styled(Island)`
-	width: 530px;
 	max-height: 622px;
 	overflow-y: scroll;
 	padding: 0;
 	background-color: rgba(0, 0, 0, 0.05);
+
+	width: 440px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 `;
 
 const HistoryTitle = styled.div`
@@ -25,8 +29,8 @@ const HistoryItem = styled.div`
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
-	height: 74px;
-	font-size: 15px;
+	height: 70px;
+	font-size: 14px;
 	white-space: nowrap;
 
 	&:nth-child(even) {
@@ -39,9 +43,10 @@ const HistoryItem = styled.div`
 `;
 
 const HistoryItemIcon = styled.div`
-	width: 50px;
-	height: 50px;
+	width: 30px;
+	height: 30px;
 	border-radius: 25px;
+	margin: 0 5px;
 	background-color: #159761;
 	background-image: url(${({bankSmLogoUrl}) => bankSmLogoUrl});
 	background-size: contain;
@@ -49,7 +54,7 @@ const HistoryItemIcon = styled.div`
 `;
 
 const HistoryItemTitle = styled.div`
-	width: 290px;
+	width: 250px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 `;
@@ -74,11 +79,11 @@ const History = ({cardHistory}) => {
 				break;
 			}
 			case 'prepaidCard': {
-				typeTitle = 'Пополнение с карты';
+				typeTitle = 'Пополнение с кошелька';
 				break;
 			}
-			case 'withdrawCard': {
-				typeTitle = 'Перевод на карту';
+			case 'card2Card': {
+				typeTitle = 'Перевод с карты на карту';
 				break;
 			}
 			default: {
@@ -86,7 +91,7 @@ const History = ({cardHistory}) => {
 			}
 		}
 
-		return `${typeTitle}: ${item.data}`;
+		return `${typeTitle}`;
 	};
 
 	return (
@@ -106,6 +111,9 @@ const History = ({cardHistory}) => {
 						<HistoryItemIcon bankSmLogoUrl={item.card.theme.bankSmLogoUrl} />
 						<HistoryItemTitle>
 							{getHistoryItemTitle(item)}
+							<HistoryItemTitle>
+								{item.data}
+							</HistoryItemTitle>
 						</HistoryItemTitle>
 						<HistoryItemTime>
 							{historyItemDate.format('HH:mm')}

@@ -29,6 +29,7 @@ class Withdraw extends Component {
 			stage: 'success',
 			transaction
 		});
+		this.props.onSuccess();
 	}
 
 	onPaymentReject(response) {
@@ -80,7 +81,8 @@ Withdraw.propTypes = {
 		id: PropTypes.number,
 		theme: PropTypes.object
 	}).isRequired,
-	inactiveCardsList: PropTypes.arrayOf(PropTypes.object).isRequired
+	inactiveCardsList: PropTypes.arrayOf(PropTypes.object).isRequired,
+	onSuccess: PropTypes.func.isRequired
 };
 
 export default Withdraw;

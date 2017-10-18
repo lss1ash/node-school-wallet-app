@@ -5,7 +5,7 @@ import styled from 'emotion/react';
 import {Island, Title, Button, Input} from './';
 
 const PrepaidLayout = styled(Island)`
-	width: 350px;
+	width: 440px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -190,7 +190,7 @@ class PrepaidContract extends Component {
 		return (
 			<form onSubmit={(event) => this.onSubmitForm(event)}>
 				<PrepaidLayout>
-					<PrepaidTitle>Пополнить карту</PrepaidTitle>
+					<PrepaidTitle>Пополнить карту с кошелька</PrepaidTitle>
 
 					<PrepaidItems>
 						{
