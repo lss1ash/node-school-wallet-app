@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "lint": "eslint ./source",
-		"precommit": "npm run lint"
+    "precommit": "npm run lint"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
     "node": "^8.2"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "husky": "^0.14.3",
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
