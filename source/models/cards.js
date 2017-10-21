@@ -80,13 +80,14 @@ class Cards {
 
 		if (!card) {
 			logger.log('info', 'Карта с указанным идентификатором не найдена', id);
-			return;
+			return false;
 			// throw new ApplicationError(`Card with ID=${id} not found`, 404);
 		}
 
 		const cardIndex = this._cards.indexOf(card);
 		this._cards.splice(cardIndex, 1);
 		await file.write(this._dataSource, this._cards);
+		return true;
 	}
 
 	/**
