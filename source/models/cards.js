@@ -80,6 +80,7 @@ class Cards {
 
 		if (!card) {
 			logger.log('info', 'Карта с указанным идентификатором не найдена', id);
+			return;
 			// throw new ApplicationError(`Card with ID=${id} not found`, 404);
 		}
 
@@ -95,6 +96,7 @@ class Cards {
 	* @returns {Boolean, Number} существует?, индекс
 	*/
 	getExistent(card) {
+		if (!card || !Object.prototype.hasOwnProperty.call(card, 'cardNumber')) return false;
 		const foundOne = this._cards.find((item) => item.cardNumber === card.cardNumber);
 		if (foundOne) {
 			return foundOne;
@@ -103,6 +105,7 @@ class Cards {
 	}
 
 	existsId(cardId) {
+		if (!cardId) return false;
 		const foundOne = this._cards.find((item) => item.id === cardId);
 		if (foundOne) {
 			return true;
