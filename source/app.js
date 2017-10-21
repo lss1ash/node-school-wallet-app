@@ -77,16 +77,18 @@ app.use(async (ctx, next) => {
 	await next();
 });
 
-// // Создадим промежуточную модель Payment на уровне приложения и проинициализируем ее
-// app.use(async (ctx, next) => {
-// 	ctx.Payment = new Payment();
-// 	await next();
-// });
-
 app.use(bodyParser);
 app.use(router.routes());
 app.use(serve('./public'));
 
-app.listen(3000, () => {
-	logger.log('info', 'Application started');
-});
+// app.listen(3000, () => {
+// 	logger.log('info', 'Application started');
+// });
+
+if (!module.parent) {
+	app.listen(3000, () => {
+		logger.log('info', 'Application started');
+	});
+}
+
+module.exports = app;
