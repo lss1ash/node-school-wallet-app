@@ -5,6 +5,11 @@ const logger = require('../../libs/logger')('wallet-app');
 
 module.exports = async (ctx) => {
 	const transaction = ctx.request.body;
+
+	if (!transaction) {
+		ctx.status = 400;
+		return;
+	}
 	transaction.cardId = +ctx.params.id;
 
 	if (!ctx.Cards.existsId(transaction.cardId)) {
@@ -16,6 +21,10 @@ module.exports = async (ctx) => {
 	}
 
 	const newTransaction = await ctx.Transactions.create(transaction);
-	ctx.status = 201;
-	ctx.body = newTransaction;
+	if (newTransaction) {
+		ctx.status = 201;
+		ctx.body = newTransaction;
+		return;
+	}
+	ctx.status = 400;
 };
