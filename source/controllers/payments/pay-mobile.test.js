@@ -1,3 +1,4 @@
+
 'use strict';
 
 jest.mock('fs');
@@ -22,29 +23,29 @@ beforeAll(() => {
 });
 afterAll(() => server.close());
 
-test('fill-card should create a fill payment for a card', async () => {
+test('pay-mobile should create a pay payment for a card', async () => {
 	const request = {
 		amount: '0.55',
 		data: '8-800-1122-332'
 	};
 	const response = await supertest(server)
-		.post('/cards/1/fill/')
+		.post('/cards/1/pay/')
 		.set('Accept', 'application/json')
 		.send(request);
 
 	expect(response.statusCode).toBe(201);
 	expect(response.body).toHaveProperty('transaction');
-	expect(response.body.transaction.sum).toEqual(request.amount);
+	expect(response.body.transaction.sum).toEqual((-request.amount).toString());
 	expect(response.body.transaction.cardId).toBe(1);
-	expect(response.body.transaction.type).toBe('prepaidCard');
+	expect(response.body.transaction.type).toBe('paymentMobile');
 });
 
-test('fill-card return 500 if invalid request passed', async () => {
+test('pay-mobile return 500 if invalid request passed', async () => {
 	const request = {
 		data: '8-800-1122-332'
 	};
 	const response = await supertest(server)
-		.post('/cards/1/fill/')
+		.post('/cards/1/pay/')
 		.set('Accept', 'application/json')
 		.send(request);
 
