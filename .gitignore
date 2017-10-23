@@ -4,6 +4,7 @@ public/*
 !public/favicon.ico
 source/views/server/bundle.js
 node_modules/
+ssl/
 .DS_Store
 Thumbs.db
 .idea

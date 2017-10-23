@@ -1,5 +1,8 @@
 'use strict';
 
+const https = require('https');
+const fs = require('fs');
+
 const Koa = require('koa');
 const serve = require('koa-static');
 const router = require('koa-router')();
@@ -81,12 +84,12 @@ app.use(bodyParser);
 app.use(router.routes());
 app.use(serve('./public'));
 
-// app.listen(3000, () => {
-// 	logger.log('info', 'Application started');
-// });
-
 if (!module.parent) {
-	app.listen(3000, () => {
+	const options = {
+		key: fs.readFileSync('ssl/key.pem'),
+		cert: fs.readFileSync('ssl/cert.pem')
+	};
+	https.createServer(options, app.callback()).listen(3000, () => {
 		logger.log('info', 'Application started');
 	});
 }
