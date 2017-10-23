@@ -22,29 +22,32 @@ beforeAll(() => {
 });
 afterAll(() => server.close());
 
-test('fill-card should create a fill payment for a card', async () => {
+test('transfer-to-card should return success code and last transaction', async () => {
 	const request = {
-		amount: '0.55',
-		data: '8-800-1122-332'
+		amount: '8500',
+		data: 3
 	};
+
 	const response = await supertest(server)
-		.post('/cards/1/fill/')
+		.post('/cards/1/transfer/')
 		.set('Accept', 'application/json')
 		.send(request);
 
-	expect(response.statusCode).toBe(201);
+	expect(response.statusCode).toBeGreaterThanOrEqual(200);
+	expect(response.statusCode).toBeLessThan(300);
+
 	expect(response.body).toHaveProperty('transaction');
 	expect(response.body.transaction.sum).toEqual(request.amount);
-	expect(response.body.transaction.cardId).toBe(1);
-	expect(response.body.transaction.type).toBe('prepaidCard');
+	expect(response.body.transaction.cardId).toBe(request.data);
+	expect(response.body.transaction.type).toBe('card2Card');
 });
 
-test('fill-card returns 500 if invalid request passed', async () => {
+test('transfer-to-card should return 500 if invalid request passed', async () => {
 	const request = {
-		data: '8-800-1122-332'
+		sasha: 'krut'
 	};
 	const response = await supertest(server)
-		.post('/cards/1/fill/')
+		.post('/cards/1/transfer/')
 		.set('Accept', 'application/json')
 		.send(request);
 

@@ -40,7 +40,7 @@ test('pay-mobile should create a pay payment for a card', async () => {
 	expect(response.body.transaction.type).toBe('paymentMobile');
 });
 
-test('pay-mobile return 500 if invalid request passed', async () => {
+test('pay-mobile returns 400 if invalid request passed', async () => {
 	const request = {
 		data: '8-800-1122-332'
 	};
