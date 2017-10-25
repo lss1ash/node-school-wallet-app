@@ -20,7 +20,9 @@ const StyledButton = styled.button`
 	}
 `;
 
-const Button = ({bgColor, textColor, children, className}) => (
+const Button = ({
+	bgColor, textColor, children, className
+}) => (
 	<StyledButton bgColor={bgColor} textColor={textColor} className={className}>
 		{children}
 	</StyledButton>

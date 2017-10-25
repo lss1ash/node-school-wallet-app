@@ -115,7 +115,36 @@ class MobilePaymentContract extends Component {
 			return;
 		}
 
-		this.props.onPaymentSuccess({sum, phoneNumber, commission});
+		fetch(`/cards/${this.props.activeCard.id}/pay`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				amount: this.getSumWithCommission().toString(),
+				data: phoneNumber
+			})
+		})
+		.catch((error) => {
+			this.props.onPaymentReject({status: 400, message: 'При выполнении запроса к серверу произошла непредвиденная ошибка'});
+		})
+		.then((response) => {
+			if (response) {
+				if (response.status === 201) {
+					response.json().then(body => this.props.onPaymentSuccess({
+						sum: this.getSumWithCommission(),
+						phoneNumber: body.transaction.data,
+						commission,
+						transactionNumber: body.transaction.id
+					}));
+				}	else {
+					response.json().then(body => this.props.onPaymentReject({status: response.status, message: body.message}));
+				}
+			}
+		})
+		.catch((error) => {
+			this.props.onPaymentReject({status: 400, message: 'При выполнении запроса к серверу произошла непредвиденная ошибка'});
+		});
 	}
 
 	/**
@@ -151,8 +180,8 @@ class MobilePaymentContract extends Component {
 						<Label>Телефон</Label>
 						<InputPhoneNumber
 							name='phoneNumber'
-							value={this.state.phoneNumber}
-							readOnly='true' />
+							defaultValue={this.state.phoneNumber}
+							onChange={(event) => this.handleInputChange(event)} />
 					</InputField>
 					<InputField>
 						<Label>Сумма</Label>
@@ -175,13 +204,12 @@ class MobilePaymentContract extends Component {
 		);
 	}
 }
-
 MobilePaymentContract.propTypes = {
 	activeCard: PropTypes.shape({
 		id: PropTypes.number,
-		theme: PropTypes.object
 	}).isRequired,
-	onPaymentSuccess: PropTypes.func.isRequired
+	onPaymentSuccess: PropTypes.func.isRequired,
+	onPaymentReject: PropTypes.func.isRequired
 };
 
 export default MobilePaymentContract;

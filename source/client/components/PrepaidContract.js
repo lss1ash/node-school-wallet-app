@@ -5,7 +5,7 @@ import styled from 'emotion/react';
 import {Island, Title, Button, Input} from './';
 
 const PrepaidLayout = styled(Island)`
-	width: 350px;
+	width: 440px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -27,27 +27,26 @@ const PrepaidItem = styled.div`
 	align-items: center;
 	border-radius: 3px;
 	cursor: pointer;
-	background-color: ${({selected, bgColor}) => selected ? bgColor : 'rgba(0, 0, 0, 0.05)'};
+	background-color: ${({selected, bgColor}) => (selected ? bgColor : 'rgba(0, 0, 0, 0.05)')};
 `;
 
 const PrepaidItemIcon = styled.div`
 	width: 42px;
 	height: 42px;
 	margin: 18px;
-	border-radius: 21px;
 	background-image: url(${({bankSmLogoUrl}) => bankSmLogoUrl});
 	background-size: contain;
 	background-repeat: no-repeat;
-	filter: ${({selected}) => selected ? 'none' : 'grayscale(100%)'};
+	filter: ${({selected}) => (selected ? 'none' : 'grayscale(100%)')};
 `;
 
 const PrepaidItemTitle = styled.div`
 	font-size: 13px;
-	color: ${({selected, textColor}) => selected ? textColor : 'rgba(255, 255, 255, 0.6)'};
+	color: ${({selected, textColor}) => (selected ? textColor : 'rgba(255, 255, 255, 0.6)')};
 `;
 
 const PrepaidItemDescription = styled.div`
-	color: ${({selected, textColor}) => selected ? textColor : 'rgba(255, 255, 255, 0.4)'};
+	color: ${({selected, textColor}) => (selected ? textColor : 'rgba(255, 255, 255, 0.4)')};
 `;
 
 const InputField = styled.div`
@@ -70,6 +69,19 @@ const Currency = styled.span`
 	color: #fff;
 `;
 
+const WalletStub = [
+	{
+		id: 123,
+		company: 'Яндекс.Деньги',
+		number: '1234567890'
+	},
+	{
+		id: 789,
+		company: 'Яндекс.Деньги',
+		number: '2424249999'
+	}
+];
+
 /**
  * Класс компонента PrepaidContract
  */
@@ -82,17 +94,17 @@ class PrepaidContract extends Component {
 		super(props);
 
 		this.state = {
-			activeCardIndex: 0,
+			activeWalletIndex: 0,
 			sum: 0
 		};
 	}
 
 	/**
 	 * Изменения активной карты
-	 * @param {Number} activeCardIndex индекс активной карты
+	 * @param {Number} activeWalletIndex индекс активной карты
 	 */
-	onCardChange(activeCardIndex) {
-		this.setState({activeCardIndex});
+	onCardChange(activeWalletIndex) {
+		this.setState({activeWalletIndex});
 	}
 
 	/**
@@ -120,7 +132,7 @@ class PrepaidContract extends Component {
 			event.preventDefault();
 		}
 
-		const {sum} = this.state;
+		const {sum, activeWalletIndex} = this.state;
 		const {activeCard} = this.props;
 
 		const isNumber = !isNaN(parseFloat(sum)) && isFinite(sum);
@@ -128,10 +140,41 @@ class PrepaidContract extends Component {
 			return;
 		}
 
-		this.props.onPaymentSuccess({
-			sum,
-			number: activeCard.number
+		fetch(`/cards/${this.props.activeCard.id}/fill`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				amount: sum,
+				data: WalletStub[activeWalletIndex].number
+			})
+		})
+		.catch((error) => {
+			this.props.onPaymentReject({status: 400, message: 'При выполнении запроса к серверу произошла непредвиденная ошибка'});
+		})
+		.then((response) => {
+			if (response) {
+				if (response.status === 201) {
+					response.json().then(body => this.props.onPaymentSuccess({
+						sum,
+						number: body.transaction.data,
+						transactionNumber: body.transaction.id
+					}));
+				}	else {
+					response.json().then(body => this.props.onPaymentReject({status: response.status, message: body.message}));
+				}
+			}
+		})
+		.catch((error) => {
+			this.props.onPaymentReject({status: 400, message: 'При выполнении запроса к серверу произошла непредвиденная ошибка'});
 		});
+
+
+		// this.props.onPaymentSuccess({
+		// 	sum,
+		// 	number: activeCard.number
+		// });
 	}
 
 	/**
@@ -139,35 +182,35 @@ class PrepaidContract extends Component {
 	 * @returns {XML}
 	 */
 	render() {
-		const {inactiveCardsList} = this.props;
+		// const {inactiveCardsList} = this.props;
 
-		const {activeCardIndex} = this.state;
-		const selectedCard = inactiveCardsList[activeCardIndex];
+		const {activeWalletIndex} = this.state;
+		const selectedWallet = WalletStub[activeWalletIndex];
 
 		return (
 			<form onSubmit={(event) => this.onSubmitForm(event)}>
 				<PrepaidLayout>
-					<PrepaidTitle>Пополнить карту</PrepaidTitle>
+					<PrepaidTitle>Пополнить карту с кошелька</PrepaidTitle>
 
 					<PrepaidItems>
 						{
-							inactiveCardsList.map((card, index) => (
+							WalletStub.map((wallet, index) => (
 								<PrepaidItem
-									bgColor={card.theme.bgColor}
-									key={card.id}
+									bgColor={this.props.activeCard.theme.bgColor}
+									key={wallet.id}
 									onClick={() => this.onCardChange(index)}
-									selected={activeCardIndex === index}>
+									selected={activeWalletIndex === index}>
 									<PrepaidItemIcon
-										bankSmLogoUrl={card.theme.bankSmLogoUrl}
-										selected={activeCardIndex === index} />
+										bankSmLogoUrl='assets/yamoney-wallet.svg'
+										selected={activeWalletIndex === index} />
 									<PrepaidItemTitle
-										textColor={card.theme.textColor}
-										selected={activeCardIndex === index}>
-										C банковской карты
+										textColor={this.props.activeCard.theme.textColor}
+										selected={activeWalletIndex === index}>
+										C электронного кошелька
 										<PrepaidItemDescription
-											textColor={card.theme.textColor}
-											selected={activeCardIndex === index}>
-											{card.number}
+											textColor={this.props.activeCard.theme.textColor}
+											selected={activeWalletIndex === index}>
+											{wallet.number}
 										</PrepaidItemDescription>
 									</PrepaidItemTitle>
 								</PrepaidItem>
@@ -184,8 +227,8 @@ class PrepaidContract extends Component {
 					</InputField>
 					<Button
 						type='submit'
-						bgColor={selectedCard.theme.bgColor}
-						textColor={selectedCard.theme.textColor}>
+						bgColor={this.props.activeCard.theme.bgColor}
+						textColor={this.props.activeCard.theme.textColor}>
 						Пополнить
 					</Button>
 				</PrepaidLayout>
@@ -199,8 +242,9 @@ PrepaidContract.propTypes = {
 		id: PropTypes.number,
 		theme: PropTypes.object
 	}).isRequired,
-	inactiveCardsList: PropTypes.arrayOf(PropTypes.object).isRequired,
-	onPaymentSuccess: PropTypes.func.isRequired
+	// inactiveCardsList: PropTypes.arrayOf(PropTypes.object).isRequired,
+	onPaymentSuccess: PropTypes.func.isRequired,
+	onPaymentReject: PropTypes.func.isRequired
 };
 
 export default PrepaidContract;

@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 
 import {Island} from './';
 
-const MobilePaymentLayout = styled(Island)`
+const WithdrawLayout = styled(Island)`
 	width: 440px;
-	background: #108051;
+	background: #4ABDAC;
 	position: relative;
 	color: #fff;
 `;
@@ -26,12 +26,6 @@ const Header = styled.div`
 
 const Sum = styled.div`
 	font-size: 48px;
-`;
-
-const CommissionTips = styled.div`
-	font-size: 13px;
-	opacity: 0.6;
-	margin-bottom: 20px;
 `;
 
 const Section = styled.div`
@@ -71,40 +65,38 @@ const RepeatPayment = styled.button`
 	text-transform: uppercase;
 `;
 
-const MobilePaymentSuccess = ({transaction, repeatPayment}) => {
-	const {sum, phoneNumber, commission, transactionNumber} = transaction;
+const WithdrawSuccess = ({transaction, repeatPayment}) => {
+	const {sum, cardNumber, transactionNumber} = transaction;
 
 
 	return (
-		<MobilePaymentLayout>
+		<WithdrawLayout>
 			<SuccessIcon />
-			<Header>МегаФон (Россия)</Header>
+			<Header>Перевод выполнен</Header>
 			<Sum>{sum} ₽</Sum>
-			<CommissionTips>В том числе комиссия {commission} ₽</CommissionTips>
 			<Section>
 				<SectionLabel>Номер транзакции</SectionLabel>
 				<SectionValue>{transactionNumber}</SectionValue>
 			</Section>
 			<Section>
-				<SectionLabel>Номер телефона</SectionLabel>
-				<SectionValue>{phoneNumber}</SectionValue>
+				<SectionLabel>Карта получателя</SectionLabel>
+				<SectionValue>{cardNumber}</SectionValue>
 			</Section>
 			<Instruction>
 				Мы пришлем чек на sam@yandex.ru. Вы можете изменить email в «Настройках».
 			</Instruction>
-			<RepeatPayment onClick={repeatPayment}>Отправить еще один перевод</RepeatPayment>
-		</MobilePaymentLayout>
+			<RepeatPayment onClick={repeatPayment}>Выполнить ещё один перевод</RepeatPayment>
+		</WithdrawLayout>
 	);
 };
 
-MobilePaymentSuccess.propTypes = {
+WithdrawSuccess.propTypes = {
 	transaction: PropTypes.shape({
-		sum: PropTypes.number,
-		phoneNumber: PropTypes.string,
-		commission: PropTypes.number,
-
+		sum: PropTypes.string,
+		cardNumber: PropTypes.string,
+		transactionNumber: PropTypes.string
 	}).isRequired,
 	repeatPayment: PropTypes.func.isRequired
 };
 
-export default MobilePaymentSuccess;
+export default WithdrawSuccess;

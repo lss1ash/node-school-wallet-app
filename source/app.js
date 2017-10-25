@@ -12,6 +12,10 @@ const createCardController = require('./controllers/cards/create-card');
 const deleteCardController = require('./controllers/cards/delete-card');
 const errorController = require('./controllers/error');
 
+const mobilePaymentController = require('./controllers/payments/pay-mobile');
+const fillCardController = require('./controllers/payments/fill-card');
+const card2CardController = require('./controllers/payments/transfer-to-card');
+
 const getTransactionsController = require('./controllers/transactions/get-transactions');
 const createTransactionController = require('./controllers/transactions/create-transaction');
 
@@ -30,6 +34,10 @@ router.get('/', getAppController);
 router.get('/cards/', getCardsController);
 router.post('/cards/', createCardController);
 router.delete('/cards/:id', deleteCardController);
+
+router.post('/cards/:id/pay', mobilePaymentController);
+router.post('/cards/:id/fill', fillCardController);
+router.post('/cards/:id/transfer', card2CardController);
 
 router.get('/cards/:id/transactions', getTransactionsController);
 router.post('/cards/:id/transactions', createTransactionController);
@@ -68,6 +76,12 @@ app.use(async (ctx, next) => {
 	await ctx.Transactions.getAll();
 	await next();
 });
+
+// // Создадим промежуточную модель Payment на уровне приложения и проинициализируем ее
+// app.use(async (ctx, next) => {
+// 	ctx.Payment = new Payment();
+// 	await next();
+// });
 
 app.use(bodyParser);
 app.use(router.routes());

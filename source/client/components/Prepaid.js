@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import PrepaidContract from './PrepaidContract';
 import PrepaidSuccess from './PrepaidSuccess';
+import PrepaidReject from './PrepaidReject';
 
 /**
  * Класс компонента Prepaid
@@ -27,6 +28,14 @@ class Prepaid extends Component {
 			stage: 'success',
 			transaction
 		});
+		this.props.onSuccess();
+	}
+
+	onPaymentReject(response) {
+		this.setState({
+			stage: 'reject',
+			response
+		});
 	}
 
 	/**
@@ -46,15 +55,22 @@ class Prepaid extends Component {
 
 		if (this.state.stage === 'success') {
 			return (
-				<PrepaidSuccess transaction={transaction} repeatPayment={() => this.repeatPayment()} />
+				<PrepaidSuccess transaction={this.state.transaction} repeatPayment={() => this.repeatPayment()} />
+			);
+		}
+
+		if (this.state.stage === 'reject') {
+			return (
+				<PrepaidReject response={this.state.response} repeatPayment={() => this.repeatPayment()} />
 			);
 		}
 
 		return (
 			<PrepaidContract
 				activeCard={activeCard}
-				inactiveCardsList={inactiveCardsList}
-				onPaymentSuccess={(transaction) => this.onPaymentSuccess(transaction)} />
+				// inactiveCardsList={inactiveCardsList}
+				onPaymentSuccess={(transaction) => this.onPaymentSuccess(transaction)}
+				onPaymentReject={(response) => this.onPaymentReject(response)} />
 		);
 	}
 }
@@ -63,7 +79,8 @@ Prepaid.propTypes = {
 	activeCard: PropTypes.shape({
 		id: PropTypes.number
 	}).isRequired,
-	inactiveCardsList: PropTypes.arrayOf(PropTypes.object).isRequired
+	inactiveCardsList: PropTypes.arrayOf(PropTypes.object).isRequired,
+	onSuccess: PropTypes.func.isRequired
 };
 
 export default Prepaid;

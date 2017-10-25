@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import styled from 'emotion/react';
 import {injectGlobal} from 'emotion';
@@ -58,10 +59,7 @@ class App extends Component {
 		super();
 
 		const cardsList = this.prepareCardsData(cardsData);
-		const cardHistory = transactionsData.map((data) => {
-			const card = cardsList.find((card) => card.id === data.cardId);
-			return card ? Object.assign({}, data, {card}) : data;
-		});
+		const cardHistory = this.prepareTransactionsData(cardsList, transactionsData);
 
 		this.state = {
 			cardsList,
@@ -99,6 +97,33 @@ class App extends Component {
 		});
 	}
 
+	prepareTransactionsData(cardsList, transactionsData) {
+		return transactionsData.map((data) => {
+			const card = cardsList.find((card) => card.id === data.cardId);
+			return card ? Object.assign({}, data, {card}) : data;
+		});
+	}
+
+	getAllCardsData() {
+		return axios.get('/cards/');
+	}
+
+	getAllTransactionsData() {
+		return axios.get('/cards/all/transactions');
+	}
+
+	getAllBankingData() {
+		axios.all([this.getAllCardsData(), this.getAllTransactionsData()])
+		  .then(axios.spread((cards, transactions) => {
+				const cardsList = this.prepareCardsData(cards.data);
+				const cardHistory = this.prepareTransactionsData(cardsList, transactions.data);
+				this.setState({cardsList, cardHistory});
+		  }))
+			.catch(error => {
+				console.error('Не удалось загрузить данные с сервера:', error.message);
+			});
+	}
+
 	/**
 	 * Обработчик переключения карты
 	 *
@@ -106,6 +131,7 @@ class App extends Component {
 	 */
 	onCardChange(activeCardIndex) {
 		this.setState({activeCardIndex});
+		// this.getAllBankingData();
 	}
 
 	/**
@@ -119,7 +145,7 @@ class App extends Component {
 		const {cardsList, activeCardIndex, cardHistory} = this.state;
 		const activeCard = cardsList[activeCardIndex];
 
-		const inactiveCardsList = cardsList.filter((card, index) => index === activeCardIndex ? false : card);
+		const inactiveCardsList = cardsList.filter((card, index) => (index === activeCardIndex ? false : card));
 		const filteredHistory = cardHistory.filter((data) => data.cardId === activeCard.id);
 
 		return (
@@ -131,17 +157,21 @@ class App extends Component {
 				<CardPane>
 					<Header activeCard={activeCard} user={data.user} />
 					<Workspace>
-						<History cardHistory={filteredHistory} />
+						<History
+							cardHistory={filteredHistory}
+							cardsList={cardsList} />
 						<Prepaid
 							activeCard={activeCard}
 							inactiveCardsList={inactiveCardsList}
-							onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)}
-						/>
-						<MobilePayment activeCard={activeCard} />
+							onSuccess={() => this.getAllBankingData()}
+							onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)} />
+						<MobilePayment
+							activeCard={activeCard}
+							onSuccess={() => this.getAllBankingData()}/>
 						<Withdraw
 							activeCard={activeCard}
 							inactiveCardsList={inactiveCardsList}
-						/>
+							onSuccess={() => this.getAllBankingData()} />
 					</Workspace>
 				</CardPane>
 			</Wallet>

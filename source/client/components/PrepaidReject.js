@@ -8,7 +8,7 @@ const PrepaidLayout = styled(Island)`
 	width: 440px;
 	display: flex;
 	flex-direction: column;
-	background-color: #353536;
+	background-color: #FF3B3F;
 	position: relative;
 	color: #fff;
 `;
@@ -61,29 +61,16 @@ const RepeatPayment = styled.button`
 	text-transform: uppercase;
 `;
 
-const PrepaidSuccess = ({transaction, repeatPayment}) => {
-	const {sum, number, transactionNumber} = transaction;
+const PrepaidSuccess = ({response, repeatPayment}) => {
+	const {status, message} = response;
 
 	return (
 		<PrepaidLayout>
 			<CheckIcom />
 			<SectionGroup>
-				<Header>Карта пополнена</Header>
+				<Header>Ошибка пополнения карты {status}</Header>
 				<Section>
-					<SectionLabel>Название платежа:</SectionLabel>
-					<SectionValue>Пополнение c электронного кошелька</SectionValue>
-				</Section>
-				<Section>
-					<SectionLabel>Номер кошелька:</SectionLabel>
-					<SectionValue>{number}</SectionValue>
-				</Section>
-				<Section>
-					<SectionLabel>Номер транзакции:</SectionLabel>
-					<SectionValue>{transactionNumber}</SectionValue>
-				</Section>
-				<Section>
-					<SectionLabel>Сумма:</SectionLabel>
-					<SectionValue>{sum} ₽</SectionValue>
+					<SectionLabel>{message}</SectionLabel>
 				</Section>
 			</SectionGroup>
 			<RepeatPayment onClick={repeatPayment}>Отправить еще один перевод</RepeatPayment>
@@ -92,9 +79,9 @@ const PrepaidSuccess = ({transaction, repeatPayment}) => {
 };
 
 PrepaidSuccess.propTypes = {
-	transaction: PropTypes.shape({
-		sum: PropTypes.string,
-		number: PropTypes.string
+	response: PropTypes.shape({
+		status: PropTypes.number,
+		message: PropTypes.string
 	}).isRequired,
 	repeatPayment: PropTypes.func.isRequired
 };

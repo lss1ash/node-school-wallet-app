@@ -6,11 +6,15 @@ import moment from 'moment';
 import {Island} from './';
 
 const HistoryLayout = styled(Island)`
-	width: 530px;
-	max-height: 622px;
+	max-height: 440px;
 	overflow-y: scroll;
 	padding: 0;
 	background-color: rgba(0, 0, 0, 0.05);
+
+	width: 440px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 `;
 
 const HistoryTitle = styled.div`
@@ -25,8 +29,8 @@ const HistoryItem = styled.div`
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
-	height: 74px;
-	font-size: 15px;
+	height: 70px;
+	font-size: 14px;
 	white-space: nowrap;
 
 	&:nth-child(even) {
@@ -39,9 +43,10 @@ const HistoryItem = styled.div`
 `;
 
 const HistoryItemIcon = styled.div`
-	width: 50px;
-	height: 50px;
+	width: 30px;
+	height: 30px;
 	border-radius: 25px;
+	margin: 0 5px;
 	background-color: #159761;
 	background-image: url(${({bankSmLogoUrl}) => bankSmLogoUrl});
 	background-size: contain;
@@ -49,7 +54,7 @@ const HistoryItemIcon = styled.div`
 `;
 
 const HistoryItemTitle = styled.div`
-	width: 290px;
+	width: 250px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 `;
@@ -64,7 +69,7 @@ const HistoryItemSum = styled.div`
 	text-overflow: ellipsis;
 `;
 
-const History = ({cardHistory}) => {
+const History = ({cardHistory, cardsList}) => {
 	const getHistoryItemTitle = (item) => {
 		let typeTitle = '';
 
@@ -74,11 +79,11 @@ const History = ({cardHistory}) => {
 				break;
 			}
 			case 'prepaidCard': {
-				typeTitle = 'Пополнение с карты';
+				typeTitle = 'Пополнение с кошелька';
 				break;
 			}
-			case 'withdrawCard': {
-				typeTitle = 'Перевод на карту';
+			case 'card2Card': {
+				typeTitle = 'Перевод с карты на карту';
 				break;
 			}
 			default: {
@@ -86,7 +91,15 @@ const History = ({cardHistory}) => {
 			}
 		}
 
-		return `${typeTitle}: ${item.data}`;
+		return `${typeTitle}`;
+	};
+
+	const getHistoryAdditionalInfo = (item) => {
+		if (item.type === 'card2Card') {
+				const correspondingCard = cardsList.find(card => card.id.toString() === item.data.toString());
+				return correspondingCard ? correspondingCard.number : undefined;
+		}
+		return item.data;
 	};
 
 	return (
@@ -103,9 +116,12 @@ const History = ({cardHistory}) => {
 
 				return (
 					<HistoryItem key={index}>
-						<HistoryItemIcon bankSmLogoUrl={item.card.theme.bankSmLogoUrl}/>
+						<HistoryItemIcon bankSmLogoUrl={item.card.theme.bankSmLogoUrl} />
 						<HistoryItemTitle>
 							{getHistoryItemTitle(item)}
+							<HistoryItemTitle>
+								{getHistoryAdditionalInfo(item)}
+							</HistoryItemTitle>
 						</HistoryItemTitle>
 						<HistoryItemTime>
 							{historyItemDate.format('HH:mm')}
@@ -121,7 +137,8 @@ const History = ({cardHistory}) => {
 };
 
 History.propTypes = {
-	cardHistory: PropTypes.arrayOf(PropTypes.object).isRequired
+	cardHistory: PropTypes.arrayOf(PropTypes.object).isRequired,
+	cardsList: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default History;
