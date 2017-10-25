@@ -11,7 +11,10 @@ const appData = {
 	}
 };
 
-module.exports = () => {
+module.exports = (cards, transactions) => {
+	appData.cards = cards;
+	appData.transactions = transactions;
+
 	const app = renderToString(<App data={appData} />);
 	const {html, ids, css} = extractCritical(app);
 	const data = serialize({ids, appData});

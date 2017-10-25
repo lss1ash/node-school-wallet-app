@@ -74,14 +74,14 @@ app.use(async (ctx, next) => {
 // Создадим модель Cards на уровне приложения и проинициализируем ее
 app.use(async (ctx, next) => {
 	ctx.Cards = new Cards();
-	await ctx.Cards.getAll();
+	// await ctx.Cards.getAll();
 	await next();
 });
 
 // Создадим модель Transactions на уровне приложения и проинициализируем ее
 app.use(async (ctx, next) => {
 	ctx.Transactions = new Transactions();
-	await ctx.Transactions.getAll();
+	// await ctx.Transactions.getAll();
 	await next();
 });
 

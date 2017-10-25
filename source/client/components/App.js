@@ -15,8 +15,8 @@ import {
 
 import './fonts.css';
 
-import cardsData from '../../datasource/cards';
-import transactionsData from '../../datasource/transactions';
+// import cardsData from '../../datasource/cards';
+// import transactionsData from '../../datasource/transactions';
 
 injectGlobal`
 	html,
@@ -55,11 +55,11 @@ class App extends Component {
 	/**
 	 * Конструктор
 	 */
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 
-		const cardsList = this.prepareCardsData(cardsData);
-		const cardHistory = this.prepareTransactionsData(cardsList, transactionsData);
+		const cardsList = this.prepareCardsData(props.data.cards);
+		const cardHistory = this.prepareTransactionsData(cardsList, props.data.transactions);
 
 		this.state = {
 			cardsList,
@@ -181,12 +181,17 @@ class App extends Component {
 
 App.propTypes = {
 	data: PropTypes.shape({
-		user: PropTypes.object
+		user: PropTypes.object,
+		cards: PropTypes.arrayOf(PropTypes.object).isRequired,
+		transactions: PropTypes.arrayOf(PropTypes.object).isRequired
 	})
 };
 
 App.defaultProps = {
 	data: {}
+	// ,
+	// cards: [],
+	// transactions: []
 };
 
 export default App;
