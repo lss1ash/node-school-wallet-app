@@ -7,7 +7,7 @@ module.exports = async (ctx) => {
 	if (ctx.params.id.toLowerCase() === 'all') {
 		transactions = await ctx.Transactions.getAll();
 	} else {
-		transactions = await ctx.Transactions.get(ctx.params.id);
+		transactions = await ctx.Transactions.getBy({cardId: ctx.params.id});
 	}
 	if (transactions) {
 		ctx.body = transactions;

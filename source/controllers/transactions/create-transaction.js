@@ -12,7 +12,7 @@ module.exports = async (ctx) => {
 	}
 	transaction.cardId = +ctx.params.id;
 
-	if (!ctx.Cards.existsId(transaction.cardId)) {
+	if (!ctx.Cards.get(transaction.cardId)) {
 		// throw new ApplicationError(`Card ${transaction.cardId} doesn't exist`, 400);
 		logger.log('warn', `Не удалось найти карту с идентификатором ${transaction.cardId}`);
 		ctx.status = 400;

@@ -1,34 +1,30 @@
 'use strict';
 
-const path = require('path');
-const logger = require('../libs/logger')('wallet-app');
-
-const file = require('../libs/file');
+const mongoose = require('mongoose');
+const logger = require('../libs/logger')('wallet-app: cards.js');
 const ApplicationError = require('../libs/application-error');
+const Database = require('./database');
 
-const DATA_SOURCE = 'datasource/transactions.json';
+const TransactionModel = mongoose.model('Transaction', {
+	cardId: Number,
+	type: String,
+	data: String,
+	time: {
+		type: Date,
+		default: Date.now
+	},
+	sum: String,
+	id: {
+		type: Number,
+		required: true
+	}
+});
 
-class Transactions {
+
+class Transactions extends Database {
 	constructor() {
-		this._dataSource = path.join(__dirname, '..', DATA_SOURCE);
-		this._transactions = null;
-	}
-
-	async getAll() {
-		// if (!this._transactions) {
-		this._transactions = JSON.parse(await file.read(this._dataSource));
-		// }
-		return this._transactions;
-	}
-
-	async get(cardId) {
-		if (this._transactions && this._transactions.length > 0) {
-			const transactions = this._transactions.filter((item) => +item.cardId === +cardId);
-			return transactions.length > 0 ? transactions : null;
-		}
-		logger.log('warn', 'Error getting transactions...');
-		// throw new ApplicationError('Error getting transactions...', 500);
-		return null;
+		super();
+		this._db = TransactionModel;
 	}
 
 	async create(transaction) {
@@ -39,12 +35,11 @@ class Transactions {
 			Object.prototype.hasOwnProperty.call(transaction, 'sum');
 
 		if (isDataValid) {
-			transaction.id = this._transactions.length + 1;
+			transaction.id = await this._generateId();
 			transaction.cardId = Number(transaction.cardId);
-			transaction.time = Transactions.getTime();
-			this._transactions.push(transaction);
+			// transaction.time = Transactions.getTime();
 
-			await file.write(this._dataSource, this._transactions);
+			await this._insert(transaction);
 			return transaction;
 		}
 		logger.log('warn', 'Не удалось создать транзакцию: данные карты недействительны');

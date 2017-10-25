@@ -1,40 +1,58 @@
 'use strict';
 
-const path = require('path');
-const logger = require('../libs/logger')('wallet-app');
+const mongoose = require('mongoose');
+const logger = require('../libs/logger')('wallet-app: cards.js');
+const Database = require('./database');
 
-const file = require('../libs/file');
+const CardModel = mongoose.model('Card', {
+	id: {
+		type: Number,
+		required: true
+	},
+	cardNumber: {
+		type: String,
+		required: [true, 'Card number required']
+	},
+	balance: {
+		type: String,
+		required: true
+	}
+});
+
+// const path = require('path');
+
+// const file = require('../libs/file');
 // const ApplicationError = require('../libs/application-error');
 
-const DATA_SOURCE = 'datasource/cards.json';
+// const DATA_SOURCE = 'datasource/cards.json';
 
-class Cards {
+class Cards extends Database {
 	constructor() {
-		this._dataSource = path.join(__dirname, '..', DATA_SOURCE);
-		this._cards = null;
+		super();
+		this._db = CardModel;
 	}
 
-	/**
-	 * Возвращает все карты
-	 * @returns {Object[]}
-	 */
-	async getAll() {
-		if (!this._cards) {
-			this._cards = JSON.parse(await file.read(this._dataSource));
-		}
-		return this._cards;
-	}
+	// /**
+	//  * Возвращает все карты
+	//  * @returns {Object[]}
+	//  */
+	// async getAll() {
+	// 	if (!this._cards) {
+	// 		this._cards = JSON.parse(await file.read(this._dataSource));
+	// 	}
+	// 	return this._cards;
+	// }
 
 	async updateBalance(cardId, amountDelta) {
-		const cardArrId = this._cards.findIndex((item) => item.id === cardId);
-		if (cardArrId >= 0) {
+		const card = await this.get(cardId);
+		if (card) {
 			try {
-				if (+this._cards[cardArrId].balance + amountDelta < 0) {
+				if (+card.balance + amountDelta < 0) {
 					return {updated: false, message: 'Недостаточно средств на карте'};
 				}
 
-				this._cards[cardArrId].balance = (+this._cards[cardArrId].balance + amountDelta).toString();
-				await file.write(this._dataSource, this._cards);
+				card.balance = (+card.balance + amountDelta).toFixed(2);
+				await this._update({id: cardId}, {balance: card.balance});
 
 				return {updated: true, message: 'Успешное обновление баланса карты'};
 			} catch (err) {
@@ -55,15 +73,15 @@ class Cards {
 		const isDataValid = card &&
 			Object.prototype.hasOwnProperty.call(card, 'cardNumber') &&
 			Object.prototype.hasOwnProperty.call(card, 'balance');
+
 		if (isDataValid) {
-			const existentCard = this.getExistent(card);
+			const existentCard = await this.getBy({cardNumber: card.cardNumber});
 			if (existentCard) {
-				this._cards[this._cards.indexOf(existentCard)].balance = card.balance;
+				await this._update({cardNumber: card.cardNumber}, {balance: card.balance});
 			} else {
-				card.id = this._cards.length + 1;
-				this._cards.push(card);
+				card.id = await this._generateId();
+				await this._insert(card);
 			}
-			await file.write(this._dataSource, this._cards);
 			return card;
 		}
 		// throw new ApplicationError('Card data is invalid', 400);
@@ -76,7 +94,7 @@ class Cards {
 	 * @param {Number} id идентификатор карты
 	 */
 	async remove(id) {
-		const card = this._cards.find((item) => item.id === id);
+		const card = await this.get();
 
 		if (!card) {
 			logger.log('info', 'Карта с указанным идентификатором не найдена', id);
@@ -84,9 +102,7 @@ class Cards {
 			// throw new ApplicationError(`Card with ID=${id} not found`, 404);
 		}
 
-		const cardIndex = this._cards.indexOf(card);
-		this._cards.splice(cardIndex, 1);
-		await file.write(this._dataSource, this._cards);
+		await this.remove(id);
 		return true;
 	}
 
@@ -96,23 +112,23 @@ class Cards {
 	* @param {Object} card описание карты
 	* @returns {Boolean, Number} существует?, индекс
 	*/
-	getExistent(card) {
-		if (!card || !Object.prototype.hasOwnProperty.call(card, 'cardNumber')) return false;
-		const foundOne = this._cards.find((item) => item.cardNumber === card.cardNumber);
-		if (foundOne) {
-			return foundOne;
-		}
-		return false;
-	}
-
-	existsId(cardId) {
-		if (!cardId) return false;
-		const foundOne = this._cards.find((item) => item.id === cardId);
-		if (foundOne) {
-			return true;
-		}
-		return false;
-	}
+	// getExistent(card) {
+	// 	if (!card || !Object.prototype.hasOwnProperty.call(card, 'cardNumber')) return false;
+	// 	const foundOne = this.getBy({cardNumber: card.cardNumber});
+	// 	if (foundOne) {
+	// 		return foundOne;
+	// 	}
+	// 	return false;
+	// }
+//
+// 	existsId(cardId) {
+// 		if (!cardId) return false;
+// 		const foundOne = this.get(cardId);
+// 		if (foundOne) {
+// 			return true;
+// 		}
+// 		return false;
+// 	}
 }
 
 module.exports = Cards;

@@ -9,6 +9,8 @@ const router = require('koa-router')();
 const bodyParser = require('koa-bodyparser')();
 const logger = require('./libs/logger')('wallet-app');
 
+const mongoose = require('mongoose');
+
 const getAppController = require('./controllers/app/get-root');
 const getCardsController = require('./controllers/cards/get-cards');
 const createCardController = require('./controllers/cards/create-card');
@@ -46,6 +48,9 @@ router.get('/cards/:id/transactions', getTransactionsController);
 router.post('/cards/:id/transactions', createTransactionController);
 
 router.all('/error', errorController);
+
+mongoose.connect('mongodb://localhost/wallet-app', {useMongoClient: true});
+mongoose.Promise = global.Promise;
 
 // logger
 app.use(async (ctx, next) => {

@@ -58,6 +58,7 @@
     "jest": "^21.2.1",
     "log4js": "^2.3.4",
     "moment": "^2.18.1",
+    "mongoose": "^4.12.4",
     "postcss-loader": "^2.0.6",
     "react-emotion": "^7.2.0",
     "style-loader": "^0.18.2",
