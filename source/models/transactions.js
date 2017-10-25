@@ -53,10 +53,11 @@ class Transactions {
 	}
 
 	static remove() {
-		throw new ApplicationError('Card removing is prohibited!', 400);
+		throw new ApplicationError('Transaction removing is prohibited!', 400);
 	}
 
-	// formay: 2017-08-9T05:28:31+03:00
+	// Вынести в отдельный модуль?
+	// format: 2017-08-9T05:28:31+03:00 (.length must be 25)
 	static getTime() {
 		const now = new Date();
 		const YYYY = now.getFullYear();

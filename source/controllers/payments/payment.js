@@ -71,6 +71,7 @@ class Payment {
 			body: 'Invalid request!'
 		};
 
+		// Лишнее? Выполняется конструктором в _checkParams
 		if (!this._validate()) { return response; }
 
 		const balance = await this.Cards.updateBalance(this.params.cardId, this.params.amount);

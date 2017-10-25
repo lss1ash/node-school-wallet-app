@@ -1,5 +1,8 @@
 'use strict';
 
+const https = require('https');
+const fs = require('fs');
+
 const Koa = require('koa');
 const serve = require('koa-static');
 const router = require('koa-router')();
@@ -77,16 +80,18 @@ app.use(async (ctx, next) => {
 	await next();
 });
 
-// // Создадим промежуточную модель Payment на уровне приложения и проинициализируем ее
-// app.use(async (ctx, next) => {
-// 	ctx.Payment = new Payment();
-// 	await next();
-// });
-
 app.use(bodyParser);
 app.use(router.routes());
 app.use(serve('./public'));
 
-app.listen(3000, () => {
-	logger.log('info', 'Application started');
-});
+if (!module.parent) {
+	const options = {
+		key: fs.readFileSync('ssl/key.pem'),
+		cert: fs.readFileSync('ssl/cert.pem')
+	};
+	https.createServer(options, app.callback()).listen(3000, () => {
+		logger.log('info', 'Application started');
+	});
+}
+
+module.exports = app;

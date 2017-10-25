@@ -2,6 +2,9 @@
 
 module.exports = async (ctx) => {
 	const cardId = Number(ctx.params.id);
-	await ctx.Cards.remove(cardId);
-	ctx.status = 200;
+	if (await ctx.Cards.remove(cardId)) {
+		ctx.status = 200;
+		return;
+	}
+	ctx.status = 400;
 };

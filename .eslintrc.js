@@ -1,6 +1,13 @@
 module.exports = {
-		"extends": [
-		"eslint-config-airbnb"],
+	"extends": ["eslint-config-airbnb", "plugin:jest/recommended"],
+
+	"plugins": [
+    "jest"
+  ],
+
+	"env": {
+    "jest/globals": true
+  },
 
 	"globals": {
 		"document": true
@@ -34,4 +41,5 @@ module.exports = {
 		"react/require-default-props": 0,
 		"react/no-array-index-key": 0
 	}
+
 };
